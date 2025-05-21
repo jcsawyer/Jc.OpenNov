@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov", "Jc.OpenNov\Jc.OpenNov.csproj", "{AAF2C937-AF4C-4EF8-9D20-A19A6158FFF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Tests", "Jc.OpenNov.Tests\Jc.OpenNov.Tests.csproj", "{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAF2C937-AF4C-4EF8-9D20-A19A6158FFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF2C937-AF4C-4EF8-9D20-A19A6158FFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF2C937-AF4C-4EF8-9D20-A19A6158FFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF2C937-AF4C-4EF8-9D20-A19A6158FFF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
