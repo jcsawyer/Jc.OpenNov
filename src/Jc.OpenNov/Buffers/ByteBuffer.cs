@@ -1,60 +1,60 @@
 namespace Jc.OpenNov.Buffers;
 
-public abstract class ByteBuffer
+public static class ByteBufferExtensions
 {
-    public static int GetUnsignedByte(BitSet bits, int bitOffset)
+    public static byte GetUnsignedByte(this BinaryReader reader)
     {
-        return (int)bits.GetBits(bitOffset, 8);
+        return (byte)(reader.ReadByte() & 0xff);
     }
 
-    public static void PutUnsignedByte(BitSet bits, int bitOffset, int value)
+    public static void PutUnsignedByte(this BinaryWriter writer, int value)
     {
-        bits.SetBits(bitOffset, 8, (ulong)(value & 0xFF));
+        writer.Write((byte)(value & 0xff));
     }
 
-    public static int GetUnsignedShort(BitSet bits, int bitOffset)
+    public static ushort GetUnsignedShort(this BinaryReader reader)
     {
-        return (int)bits.GetBits(bitOffset, 16);
+        return reader.ReadUInt16();
     }
 
-    public static void PutUnsignedShort(BitSet bits, int bitOffset, int value)
+    public static void PutUnsignedShort(this BinaryWriter writer, int value)
     {
-        bits.SetBits(bitOffset, 16, (ulong)(value & 0xFFFF));
+        writer.Write((ushort)(value & 0xffff));
     }
 
-    public static long GetUnsignedInt(BitSet bits, int bitOffset)
+    public static uint GetUnsignedInt(this BinaryReader reader)
     {
-        return (long)bits.GetBits(bitOffset, 32);
+        return reader.ReadUInt32();
     }
 
-    public static void PutUnsignedInt(BitSet bits, int bitOffset, long value)
+    public static void PutUnsignedInt(this BinaryWriter writer, long value)
     {
-        bits.SetBits(bitOffset, 32, (ulong)(value & 0xFFFFFFFF));
+        writer.Write((uint)(value & 0xffffffffL));
     }
 
-    public static byte[] GetBytes(BitSet bits, int bitOffset, int byteLen)
+    public static byte[] GetBytes(this BinaryReader reader)
     {
-        var result = new byte[byteLen];
-        for (var i = 0; i < byteLen; i++)
-        {
-            result[i] = (byte)bits.GetBits(bitOffset + i * 8, 8);
-        }
-        return result;
+        var length = reader.GetUnsignedShort();
+        return reader.ReadBytes(length);
+    }
+    
+    public static byte[] GetBytes(this BinaryReader reader, int length)
+    {
+        return reader.ReadBytes(length);
     }
 
-    public static BitSet GetBits(BitSet bits, int bitOffset, int byteLen, bool reverse = false)
+    public static BitSet GetBits(this BinaryReader reader, int byteLength, bool reverse)
     {
-        var extracted = new byte[byteLen];
-        for (var i = 0; i < byteLen; i++)
-        {
-            extracted[i] = (byte)bits.GetBits(bitOffset + i * 8, 8);
-        }
-
+        var bytes = reader.ReadBytes(byteLength);
         if (reverse)
         {
-            Array.Reverse(extracted);
+            Array.Reverse(bytes);
         }
+        return BitSet.ValueOf(bytes);
+    }
 
-        return BitSet.ValueOf(extracted);
+    public static BitSet GetBits(this BinaryReader reader, int byteLength)
+    {
+        return GetBits(reader, byteLength, false);
     }
 }
