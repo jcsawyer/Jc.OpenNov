@@ -31,7 +31,7 @@ internal sealed class ByteBufferTests
         _writer.Write((byte)0xAB);
         _stream.Position = 0;
 
-        var value = _reader.GetUnsignedByte();
+        var value = _reader.GetByte();
 
         Assert.That(value, Is.EqualTo(0xAB));
     }
@@ -39,7 +39,7 @@ internal sealed class ByteBufferTests
     [Test]
     public void PutUnsignedByte_Should_Write_Unsigned_Byte()
     {
-        _writer.PutUnsignedByte(0xCD);
+        _writer.PutByte(0xCD);
         _stream.Position = 0;
 
         var value = _reader.ReadByte();
@@ -50,7 +50,7 @@ internal sealed class ByteBufferTests
     [Test]
     public void GetUnsignedShort_Should_Read_Unsigned_Short()
     {
-        _writer.Write((ushort)0xBEEF);
+        _writer.PutUnsignedShort(0xBEEF);
         _stream.Position = 0;
 
         var value = _reader.GetUnsignedShort();
@@ -64,7 +64,7 @@ internal sealed class ByteBufferTests
         _writer.PutUnsignedShort(0xCAFE);
         _stream.Position = 0;
 
-        var value = _reader.ReadUInt16();
+        var value = _reader.GetUnsignedShort();
 
         Assert.That(value, Is.EqualTo(0xCAFE));
     }
@@ -72,7 +72,7 @@ internal sealed class ByteBufferTests
     [Test]
     public void GetUnsignedInt_Should_Read_Unsigned_Int()
     {
-        _writer.Write(0xDEADBEEF);
+        _writer.PutUnsignedInt(0xDEADBEEF);
         _stream.Position = 0;
 
         var value = _reader.GetUnsignedInt();
@@ -86,7 +86,7 @@ internal sealed class ByteBufferTests
         _writer.PutUnsignedInt(0x12345678);
         _stream.Position = 0;
 
-        var value = _reader.ReadUInt32();
+        var value = _reader.GetUnsignedInt();
 
         Assert.That(value, Is.EqualTo(0x12345678));
     }

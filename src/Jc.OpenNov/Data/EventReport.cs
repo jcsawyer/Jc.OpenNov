@@ -1,15 +1,16 @@
+using Jc.OpenNov.Buffers;
 using static Jc.OpenNov.Utilities.EncodableExtensions;
 
 namespace Jc.OpenNov.Data;
 
 public sealed class EventReport : Encodable
 {
-    public const int MDC_NOTI_CONFIG = 3356;
-    public const int MDC_NOTI_SEGMENT_DATA = 3361;
+    public const int MdcNotiConfig = 3356;
+    public const int MdcNotiSegmentData = 3361;
 
-    public short Handle { get; }
-    public int RelativeTime { get; }
-    public short EventType { get; }
+    public ushort Handle { get; }
+    public uint RelativeTime { get; }
+    public ushort EventType { get; }
 
     public Configuration? Configuration { get; }
     public int Instance { get; }
@@ -17,9 +18,9 @@ public sealed class EventReport : Encodable
     public List<InsulinDose> InsulinDoses { get; }
 
     public EventReport(
-        short handle,
-        int relativeTime,
-        short eventType,
+        ushort handle,
+        uint relativeTime,
+        ushort eventType,
         Configuration? configuration = null,
         int instance = -1,
         int index = -1,
@@ -33,11 +34,11 @@ public sealed class EventReport : Encodable
         Index = index;
         InsulinDoses = insulinDoses ?? new List<InsulinDose>();
 
-        Field(() => Handle, WriteShort, SizeOf);
-        Field(() => RelativeTime, WriteInt, SizeOf);
-        Field(() => EventType, WriteShort, SizeOf);
+        Field(() => Handle, WriteUnsignedShort, SizeOf);
+        Field(() => RelativeTime, WriteUnsignedInt, SizeOf);
+        Field(() => EventType, WriteUnsignedShort, SizeOf);
 
-        if (EventType == MDC_NOTI_SEGMENT_DATA)
+        if (EventType == MdcNotiSegmentData)
         {
             Field(() => Instance, WriteInt, SizeOf);
             Field(() => Index, WriteInt, SizeOf);
@@ -50,7 +51,7 @@ public sealed class EventReport : Encodable
                 Field(() => dose.GetEncodedSize(), (writer, _) => { dose.WriteTo(writer); }, len => len);
             }
         }
-        else if (EventType == MDC_NOTI_CONFIG && Configuration != null)
+        else if (EventType == MdcNotiConfig && Configuration != null)
         {
             Field(() => Configuration!.GetEncodedSize(), (writer, _) =>
             {
@@ -62,18 +63,18 @@ public sealed class EventReport : Encodable
 
     public static EventReport ReadFrom(BinaryReader reader)
     {
-        var handle = reader.ReadInt16();
-        var relativeTime = reader.ReadInt32();
-        var eventType = reader.ReadInt16();
-        _ = reader.ReadInt16(); // len
+        var handle = reader.GetUnsignedShort();
+        var relativeTime = reader.GetUnsignedInt();
+        var eventType = reader.GetUnsignedShort();
+        _ = reader.GetUnsignedShort(); // len
 
-        if (eventType == MDC_NOTI_SEGMENT_DATA)
+        if (eventType == MdcNotiSegmentData)
         {
-            var instance = reader.ReadInt16();
-            var index = reader.ReadInt32();
-            var count = reader.ReadInt32();
-            _ = reader.ReadInt16(); // status
-            _ = reader.ReadInt16(); // bcount
+            var instance = reader.GetUnsignedShort();
+            var index = (int)reader.GetUnsignedInt();
+            var count = reader.GetUnsignedInt();
+            _ = reader.GetUnsignedShort(); // status
+            _ = reader.GetUnsignedShort(); // bcount
 
             var doses = new List<InsulinDose>();
             var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -87,7 +88,7 @@ public sealed class EventReport : Encodable
 
             return new EventReport(handle, relativeTime, eventType, null, instance, index, doses);
         }
-        else if (eventType == MDC_NOTI_CONFIG)
+        else if (eventType == MdcNotiConfig)
         {
             var config = Configuration.ReadFrom(reader);
             return new EventReport(handle, relativeTime, eventType, config);

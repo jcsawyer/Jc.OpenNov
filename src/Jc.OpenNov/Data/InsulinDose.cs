@@ -1,3 +1,7 @@
+using static Jc.OpenNov.Utilities.EncodableExtensions;
+
+using Jc.OpenNov.Buffers;
+
 namespace Jc.OpenNov.Data;
 
 public sealed class InsulinDose : Encodable
@@ -11,20 +15,24 @@ public sealed class InsulinDose : Encodable
         Time = time;
         Units = units;
         Flags = flags;
+        
+        Field(() => Time, WriteLong, SizeOf);
+        Field(() => Units, WriteInt, SizeOf);
+        Field(() => Flags, WriteInt, SizeOf);
     }
 
     public static InsulinDose ReadFrom(BinaryReader reader)
     {
-        uint relativeTime = reader.ReadUInt32();
-        int units = (int)(reader.ReadUInt32() & 0xFFFF);
-        int flags = (int)reader.ReadUInt32();
+        var relativeTime = reader.GetUnsignedInt();
+        var units = (int)(reader.GetUnsignedInt() & 0xFFFF);
+        var flags = (int)reader.GetUnsignedInt();
 
         return new InsulinDose(relativeTime, units, flags);
     }
 
-    public InsulinDose WithUtcTime(int relativeTime, long currentTime)
+    public InsulinDose WithUtcTime(uint relativeTime, long currentTime)
     {
-        long correctedTime = currentTime - ((relativeTime - Time) * 1000L);
+        var correctedTime = currentTime - ((relativeTime - Time) * 1000L);
         return new InsulinDose(correctedTime, Units, Flags);
     }
 }

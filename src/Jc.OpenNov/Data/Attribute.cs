@@ -1,3 +1,7 @@
+using static Jc.OpenNov.Utilities.EncodableExtensions;
+
+using Jc.OpenNov.Buffers;
+
 namespace Jc.OpenNov.Data;
 
 public sealed class Attribute : Encodable
@@ -39,12 +43,16 @@ public sealed class Attribute : Encodable
         Type = type;
         Data = data;
         Value = value;
+        
+        Field(() => Type, WriteInt, SizeOf);
+        Field(() => Data.Length, WriteInt, SizeOf);
+        Field(() => Data, (w, d) => w.Write(d), len => Data.Length);
     }
 
     public static Attribute ReadFrom(BinaryReader reader)
     {
-        int type = reader.ReadUInt16();
-        int len = reader.ReadUInt16();
+        int type = reader.GetUnsignedShort();
+        int len = reader.GetUnsignedShort();
         var data = reader.ReadBytes(len);
 
         var value = -1;
@@ -58,5 +66,11 @@ public sealed class Attribute : Encodable
         }
 
         return new Attribute(type, data, value);
+    }
+
+
+    public BinaryReader Wrap()
+    {
+        return new BinaryReader(new MemoryStream(Data));
     }
 }

@@ -1,35 +1,36 @@
+using Jc.OpenNov.Buffers;
 using static Jc.OpenNov.Utilities.EncodableExtensions;
 
 namespace Jc.OpenNov.Data;
 
 public sealed class ApoepElement : Encodable
 {
-    public int Version { get; set; }
-    public short Encoding { get; set; }
-    public int Nomenclature { get; set; }
-    public int Functional { get; set; }
+    public uint Version { get; set; }
+    public ushort Encoding { get; set; }
+    public uint Nomenclature { get; set; }
+    public uint Functional { get; set; }
     public int SystemType { get; set; }
     public byte[] SystemId { get; set; }
-    public short ConfigId { get; set; }
-    public int RecMode { get; set; }
-    public short ListCount { get; set; }
-    public short ListLen { get; set; }
+    public ushort ConfigId { get; set; }
+    public uint RecMode { get; set; }
+    public ushort ListCount { get; set; }
+    public ushort ListLen { get; set; }
 
     public const ushort Apoep = 20601;
     public const int SysTypeManager = unchecked((int)0x80000000);
     public const int SysTypeAgent = 0x00800000; 
 
     public ApoepElement(
-        int version,
-        short encoding,
-        int nomenclature,
-        int functional,
+        uint version,
+        ushort encoding,
+        uint nomenclature,
+        uint functional,
         int systemType,
         byte[] systemId,
-        short configId,
-        int recMode,
-        short listCount,
-        short listLen)
+        ushort configId,
+        uint recMode,
+        ushort listCount,
+        ushort listLen)
     {
         Version = version;
         Encoding = encoding;
@@ -42,40 +43,40 @@ public sealed class ApoepElement : Encodable
         ListCount = listCount;
         ListLen = listLen;
         
-        Field(() => Version, WriteInt, SizeOf);
-        Field(() => Encoding, WriteShort, SizeOf);
-        Field(() => Nomenclature, WriteInt, SizeOf);
-        Field(() => Functional, WriteInt, SizeOf);
+        Field(() => Version, WriteUnsignedInt, SizeOf);
+        Field(() => Encoding, WriteUnsignedShort, SizeOf);
+        Field(() => Nomenclature, WriteUnsignedInt, SizeOf);
+        Field(() => Functional, WriteUnsignedInt, SizeOf);
         Field(() => SystemType, WriteInt, SizeOf);
         Field(() => SystemId, WriteByteArray, SizeOf);
-        Field(() => ConfigId, WriteShort, SizeOf);
-        Field(() => RecMode, WriteInt, SizeOf);
-        Field(() => ListCount, WriteShort, SizeOf);
-        Field(() => ListLen, WriteShort, SizeOf);
+        Field(() => ConfigId, WriteUnsignedShort, SizeOf);
+        Field(() => RecMode, WriteUnsignedInt, SizeOf);
+        Field(() => ListCount, WriteUnsignedShort, SizeOf);
+        Field(() => ListLen, WriteUnsignedShort, SizeOf);
     }
 
     public static ApoepElement FromBinaryReader(BinaryReader reader)
     {
-        var version = reader.ReadInt32();
-        var encoding = reader.ReadInt16();
-        var nomenclature = reader.ReadInt32();
-        var functional = reader.ReadInt32();
-        var systemType = reader.ReadInt32();
+        var version = reader.GetUnsignedInt();
+        var encoding = reader.GetUnsignedShort();
+        var nomenclature = reader.GetUnsignedInt();
+        var functional = reader.GetUnsignedInt();
+        var systemType = reader.GetUnsignedInt();
 
-        var systemIdLength = reader.ReadInt16();
+        var systemIdLength = reader.GetUnsignedShort();
         var systemId = reader.ReadBytes(systemIdLength);
 
-        var configId = reader.ReadInt16();
-        var recMode = reader.ReadInt32();
-        var listCount = reader.ReadInt16();
-        var listLen = reader.ReadInt16();
+        var configId = reader.GetUnsignedShort();
+        var recMode = reader.GetUnsignedInt();
+        var listCount = reader.GetUnsignedShort();
+        var listLen = reader.GetUnsignedShort();
 
         return new ApoepElement(
             version,
             encoding,
             nomenclature,
             functional,
-            systemType,
+            (int)systemType,
             systemId,
             configId,
             recMode,

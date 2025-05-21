@@ -2,16 +2,16 @@ namespace Jc.OpenNov.Buffers;
 
 public sealed class BitSet
 {
-    private byte[] bits;
+    private byte[] _bits;
 
     public BitSet(int sizeInBits)
     {
-        bits = new byte[(sizeInBits + 7) / 8];
+        _bits = new byte[(sizeInBits + 7) / 8];
     }
 
     private BitSet(byte[] data)
     {
-        bits = data;
+        _bits = data;
     }
 
     public static BitSet ValueOf(byte[] data)
@@ -30,7 +30,7 @@ public sealed class BitSet
             var byteIndex = (bitOffset + i) / 8;
             var bitIndex = (bitOffset + i) % 8;
 
-            var bit = (bits[byteIndex] & (1 << bitIndex)) != 0;
+            var bit = (_bits[byteIndex] & (1 << bitIndex)) != 0;
             if (bit)
             {
                 result |= (1UL << i);
@@ -50,17 +50,17 @@ public sealed class BitSet
 
             if (bit)
             {
-                bits[byteIndex] |= (byte)(1 << bitIndex);
+                _bits[byteIndex] |= (byte)(1 << bitIndex);
             }
             else
             {
-                bits[byteIndex] &= (byte)~(1 << bitIndex);
+                _bits[byteIndex] &= (byte)~(1 << bitIndex);
             }
         }
     }
 
     public byte[] ToByteArray()
     {
-        return (byte[])bits.Clone();
+        return (byte[])_bits.Clone();
     }
 }

@@ -1,3 +1,7 @@
+using static Jc.OpenNov.Utilities.EncodableExtensions;
+
+using Jc.OpenNov.Buffers;
+
 namespace Jc.OpenNov.Data;
 
 public sealed class Configuration : Encodable
@@ -26,13 +30,33 @@ public sealed class Configuration : Encodable
         UnitCode = unitCode;
         TotalStorage = totalStorage;
         Attributes = attributes;
+        
+        Field(() => Id, WriteInt, SizeOf);
+        Field(() => Attributes.Count, WriteInt, SizeOf);
+
+        Field(GetEncodedSize, (w, len) =>
+        {
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+            
+            foreach (var attr in Attributes)
+            {
+                var attrBytes = attr.ToByteArray();
+                bw.Write(attrBytes);
+            }
+
+            var data = ms.ToArray();
+
+            WriteShort(w, (short)data.Length);
+            w.Write(data);
+        }, len => 2 + len);
     }
 
     public static Configuration ReadFrom(BinaryReader reader)
     {
-        var id = reader.ReadUInt16();
-        var count = reader.ReadUInt16();
-        _ = reader.ReadUInt16(); // skip len
+        var id = reader.GetUnsignedShort();
+        var count = reader.GetUnsignedShort();
+        _ = reader.GetUnsignedShort(); // skip len
 
         var nbSegment = -1;
         var totalEntries = -1;
@@ -43,10 +67,10 @@ public sealed class Configuration : Encodable
 
         for (var i = 0; i < count; i++)
         {
-            _ = reader.ReadUInt16(); // cls (ignored)
-            _ = reader.ReadUInt16(); // handle (ignored)
-            var attrCount = reader.ReadUInt16();
-            _ = reader.ReadUInt16(); // attrLen (ignored)
+            _ = reader.GetUnsignedShort(); // cls (ignored)
+            _ = reader.GetUnsignedShort(); // handle (ignored)
+            var attrCount = reader.GetUnsignedShort();
+            _ = reader.GetUnsignedShort(); // attrLen (ignored)
 
             for (var j = 0; j < attrCount; j++)
             {
