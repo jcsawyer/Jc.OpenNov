@@ -4,12 +4,12 @@ namespace Jc.OpenNov.Data;
 
 public sealed class SegmentInfo
 {
-    public int InstNum { get; }
+    public ushort InstNum { get; }
     public int Usage { get; }
     public List<Attribute> Items { get; }
     public SegmentInfoMap? SegmentInfoMap { get; }
 
-    public SegmentInfo(int instNum, int usage, List<Attribute> items, SegmentInfoMap? segmentInfoMap = null)
+    public SegmentInfo(ushort instNum, int usage, List<Attribute> items, SegmentInfoMap? segmentInfoMap = null)
     {
         InstNum = instNum;
         Usage = usage;

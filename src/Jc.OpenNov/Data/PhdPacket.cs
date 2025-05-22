@@ -12,14 +12,20 @@ public sealed class PhdPacket
 
     private const byte WellKnown = 0x01;
 
-    public byte OpCode { get; }
-    public int TypeLen { get; }
-    public int PayloadLen { get; }
-    public int? HeaderLen { get; }
-    public byte[] Header { get; }
-    public int Seq { get; }
-    public int Chk { get; }
-    public byte[] Content { get; }
+    public byte OpCode { get; init; }
+    public int TypeLen { get; init; }
+    public int PayloadLen { get; init; }
+    public int? HeaderLen { get; init; }
+    public byte[] Header { get; init; }
+    public int Seq { get; init; }
+    public int Chk { get; init; }
+    public byte[] Content { get; init; }
+
+    public PhdPacket(int seq, byte[] data)
+    {
+        Seq = seq;
+        Content = data;
+    }
 
     public PhdPacket(
         byte opCode,

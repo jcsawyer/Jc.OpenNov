@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -23,6 +23,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Jc.OpenNov\Jc.OpenNov.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="nvp_datatest.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

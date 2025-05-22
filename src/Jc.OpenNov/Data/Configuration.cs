@@ -6,8 +6,8 @@ namespace Jc.OpenNov.Data;
 
 public sealed class Configuration : Encodable
 {
-    public int Id { get; }
-    public int Handle { get; }
+    public ushort Id { get; }
+    public ushort Handle { get; }
     public int NbSegment { get; }
     public int TotalEntries { get; }
     public int UnitCode { get; }
@@ -15,8 +15,8 @@ public sealed class Configuration : Encodable
     public List<Attribute> Attributes { get; }
 
     public Configuration(
-        int id,
-        int handle,
+        ushort id,
+        ushort handle,
         int nbSegment,
         int totalEntries,
         int unitCode,
@@ -31,7 +31,7 @@ public sealed class Configuration : Encodable
         TotalStorage = totalStorage;
         Attributes = attributes;
         
-        Field(() => Id, WriteInt, SizeOf);
+        Field(() => Id, WriteUnsignedShort, SizeOf);
         Field(() => Attributes.Count, WriteInt, SizeOf);
 
         Field(GetEncodedSize, (w, len) =>

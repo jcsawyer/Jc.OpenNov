@@ -13,7 +13,7 @@ public sealed class EventReport : Encodable
     public ushort EventType { get; }
 
     public Configuration? Configuration { get; }
-    public int Instance { get; }
+    public short Instance { get; }
     public int Index { get; }
     public List<InsulinDose> InsulinDoses { get; }
 
@@ -22,7 +22,7 @@ public sealed class EventReport : Encodable
         uint relativeTime,
         ushort eventType,
         Configuration? configuration = null,
-        int instance = -1,
+        short instance = -1,
         int index = -1,
         List<InsulinDose>? insulinDoses = null)
     {
@@ -40,7 +40,7 @@ public sealed class EventReport : Encodable
 
         if (EventType == MdcNotiSegmentData)
         {
-            Field(() => Instance, WriteInt, SizeOf);
+            Field(() => Instance, WriteShort, SizeOf);
             Field(() => Index, WriteInt, SizeOf);
             Field(() => (int)InsulinDoses.Count, WriteInt, SizeOf);
             Field(() => (short)0, WriteShort, SizeOf); // status placeholder
@@ -86,7 +86,7 @@ public sealed class EventReport : Encodable
                 doses.Add(dose);
             }
 
-            return new EventReport(handle, relativeTime, eventType, null, instance, index, doses);
+            return new EventReport(handle, relativeTime, eventType, null, (short)instance, index, doses);
         }
         else if (eventType == MdcNotiConfig)
         {

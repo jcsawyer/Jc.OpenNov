@@ -4,11 +4,11 @@ namespace Jc.OpenNov.Data;
 
 public sealed class AResponse : Encodable
 {
-    public short Result { get; }
-    public short Protocol { get; }
+    public ushort Result { get; }
+    public ushort Protocol { get; }
     public ApoepElement Apoep { get; }
 
-    public AResponse(short result, short protocol, ApoepElement apoep)
+    public AResponse(ushort result, ushort protocol, ApoepElement apoep)
     {
         apoep.RecMode = 0;
         apoep.ConfigId = 0;
@@ -20,8 +20,8 @@ public sealed class AResponse : Encodable
         Protocol = protocol;
         Apoep = apoep;
 
-        Field(() => Result, WriteShort, SizeOf);
-        Field(() => Protocol, WriteShort, SizeOf);
+        Field(() => Result, WriteUnsignedShort, SizeOf);
+        Field(() => Protocol, WriteUnsignedShort, SizeOf);
 
         Field(() => Apoep.GetEncodedSize(), (w, _) =>
         {
