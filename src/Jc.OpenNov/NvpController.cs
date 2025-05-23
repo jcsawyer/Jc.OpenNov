@@ -108,7 +108,7 @@ public sealed class NvpController
         private void ReadSegment(SegmentInfo segment, ushort invokeId, List<InsulinDose> doseList, Func<List<InsulinDose>, bool> stopCondition)
         {
             var xferArray = _phdManager.SendApduRequest(PayloadFunctions.XferAction(invokeId, segment.InstNum));
-            using var xferMs = new MemoryStream();
+            using var xferMs = new MemoryStream(xferArray);
             using var xferReader = new BinaryReader(xferMs);
             Apdu.FromBinaryReader(xferReader); // xfer
 

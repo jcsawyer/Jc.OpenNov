@@ -85,8 +85,22 @@ public static class ByteBufferExtensions
         writer.Write((byte)((value >> 8) & 0xff));
         writer.Write((byte)(value & 0xff));
     }
-    
-    
+
+    public static long GetLong(this BinaryReader reader)
+    {
+        var bytes = reader.ReadBytes(8);
+        if (bytes.Length < 8)
+            throw new EndOfStreamException();
+
+        return ((long)bytes[0] << 56) |
+               ((long)bytes[1] << 48) |
+               ((long)bytes[2] << 40) |
+               ((long)bytes[3] << 32) |
+               ((long)bytes[4] << 24) |
+               ((long)bytes[5] << 16) |
+               ((long)bytes[6] << 8)  |
+               bytes[7];
+    }
 
     public static byte[] GetBytes(this BinaryReader reader)
     {

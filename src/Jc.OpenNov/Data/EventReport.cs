@@ -82,7 +82,7 @@ public sealed class EventReport : Encodable
             for (var i = 0; i < count; i++)
             {
                 var dose = InsulinDose.ReadFrom(reader);
-                dose.WithUtcTime(relativeTime, currentTime);
+                dose = dose.WithUtcTime(relativeTime, currentTime);
                 doses.Add(dose);
             }
 

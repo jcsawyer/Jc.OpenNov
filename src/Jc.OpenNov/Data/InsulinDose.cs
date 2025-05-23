@@ -23,7 +23,7 @@ public sealed class InsulinDose : Encodable
 
     public static InsulinDose ReadFrom(BinaryReader reader)
     {
-        var relativeTime = reader.GetUnsignedInt();
+        var relativeTime = reader.GetInt();
         var units = (int)(reader.GetUnsignedInt() & 0xFFFF);
         var flags = (int)reader.GetUnsignedInt();
 
