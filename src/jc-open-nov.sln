@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov", "Jc.OpenNov\Jc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Tests", "Jc.OpenNov.Tests\Jc.OpenNov.Tests.csproj", "{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Nfc.Android", "Jc.OpenNov.Nfc.Android\Jc.OpenNov.Nfc.Android.csproj", "{C721D824-E5E1-4489-8BBB-65B7A92B26BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A703BBE-31AE-4D52-8A1B-BB10C2B6D97E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
