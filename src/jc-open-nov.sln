@@ -6,6 +6,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Tests", "Jc.Open
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Nfc.Android", "Jc.OpenNov.Nfc.Android\Jc.OpenNov.Nfc.Android.csproj", "{C721D824-E5E1-4489-8BBB-65B7A92B26BE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{E5E893D5-7D79-4709-B46D-19D4C3B82E43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Sample", "..\samples\Jc.OpenNov.Sample\Jc.OpenNov.Sample.csproj", "{8F403E43-9E43-4498-BE80-8670CC0CD713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Sample.Android", "..\samples\Jc.OpenNov.Sample.Android\Jc.OpenNov.Sample.Android.csproj", "{45508A1B-DD97-4393-9D4D-A87EDA9CB837}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Sample.iOS", "..\samples\Jc.OpenNov.Sample.iOS\Jc.OpenNov.Sample.iOS.csproj", "{91761220-238B-43EA-B76E-194120B103D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +32,22 @@ Global
 		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F403E43-9E43-4498-BE80-8670CC0CD713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F403E43-9E43-4498-BE80-8670CC0CD713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F403E43-9E43-4498-BE80-8670CC0CD713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F403E43-9E43-4498-BE80-8670CC0CD713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45508A1B-DD97-4393-9D4D-A87EDA9CB837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45508A1B-DD97-4393-9D4D-A87EDA9CB837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45508A1B-DD97-4393-9D4D-A87EDA9CB837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45508A1B-DD97-4393-9D4D-A87EDA9CB837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91761220-238B-43EA-B76E-194120B103D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91761220-238B-43EA-B76E-194120B103D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91761220-238B-43EA-B76E-194120B103D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91761220-238B-43EA-B76E-194120B103D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F403E43-9E43-4498-BE80-8670CC0CD713} = {E5E893D5-7D79-4709-B46D-19D4C3B82E43}
+		{45508A1B-DD97-4393-9D4D-A87EDA9CB837} = {E5E893D5-7D79-4709-B46D-19D4C3B82E43}
+		{91761220-238B-43EA-B76E-194120B103D6} = {E5E893D5-7D79-4709-B46D-19D4C3B82E43}
 	EndGlobalSection
 EndGlobal
