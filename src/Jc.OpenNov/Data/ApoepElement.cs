@@ -9,7 +9,7 @@ public sealed class ApoepElement : Encodable
     public ushort Encoding { get; set; }
     public uint Nomenclature { get; set; }
     public uint Functional { get; set; }
-    public int SystemType { get; set; }
+    public uint SystemType { get; set; }
     public byte[] SystemId { get; set; }
     public ushort ConfigId { get; set; }
     public uint RecMode { get; set; }
@@ -17,7 +17,7 @@ public sealed class ApoepElement : Encodable
     public ushort ListLen { get; set; }
 
     public const ushort Apoep = 20601;
-    public const int SysTypeManager = unchecked((int)0x80000000);
+    public const uint SysTypeManager = 0x80000000;
     public const int SysTypeAgent = 0x00800000; 
 
     public ApoepElement(
@@ -25,7 +25,7 @@ public sealed class ApoepElement : Encodable
         ushort encoding,
         uint nomenclature,
         uint functional,
-        int systemType,
+        uint systemType,
         byte[] systemId,
         ushort configId,
         uint recMode,
@@ -47,7 +47,7 @@ public sealed class ApoepElement : Encodable
         Field(() => Encoding, WriteUnsignedShort, SizeOf);
         Field(() => Nomenclature, WriteUnsignedInt, SizeOf);
         Field(() => Functional, WriteUnsignedInt, SizeOf);
-        Field(() => SystemType, WriteInt, SizeOf);
+        Field(() => SystemType, WriteUnsignedInt, SizeOf);
         Field(() => SystemId, WriteByteArray, SizeOf);
         Field(() => ConfigId, WriteUnsignedShort, SizeOf);
         Field(() => RecMode, WriteUnsignedInt, SizeOf);
@@ -63,8 +63,7 @@ public sealed class ApoepElement : Encodable
         var functional = reader.GetUnsignedInt();
         var systemType = reader.GetUnsignedInt();
 
-        var systemIdLength = reader.GetUnsignedShort();
-        var systemId = reader.ReadBytes(systemIdLength);
+        var systemId = reader.GetBytes();
 
         var configId = reader.GetUnsignedShort();
         var recMode = reader.GetUnsignedInt();
@@ -76,7 +75,7 @@ public sealed class ApoepElement : Encodable
             encoding,
             nomenclature,
             functional,
-            (int)systemType,
+            systemType,
             systemId,
             configId,
             recMode,

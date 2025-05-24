@@ -101,6 +101,18 @@ public static class ByteBufferExtensions
                ((long)bytes[6] << 8)  |
                bytes[7];
     }
+    
+    public static void PutLong(this BinaryWriter writer, long value)
+    {
+        writer.Write((byte)((value >> 56) & 0xFF));
+        writer.Write((byte)((value >> 48) & 0xFF));
+        writer.Write((byte)((value >> 40) & 0xFF));
+        writer.Write((byte)((value >> 32) & 0xFF));
+        writer.Write((byte)((value >> 24) & 0xFF));
+        writer.Write((byte)((value >> 16) & 0xFF));
+        writer.Write((byte)((value >> 8) & 0xFF));
+        writer.Write((byte)(value & 0xFF));
+    }
 
     public static byte[] GetBytes(this BinaryReader reader)
     {

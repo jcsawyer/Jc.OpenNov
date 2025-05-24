@@ -1,3 +1,5 @@
+using Jc.OpenNov.Buffers;
+
 namespace Jc.OpenNov.Data;
 
 public sealed class T4Update
@@ -17,13 +19,11 @@ public sealed class T4Update
         using (var stream = new MemoryStream())
         using (var writer = new BinaryWriter(stream))
         {
-            writer.Write(Cla);
-            writer.Write(UpdateCommand);
-            writer.Write((byte)0x00); // First byte of ushort(0)
-            writer.Write((byte)0x00); // Second byte of ushort(0)
-            writer.Write((byte)(_bytes.Length + 2)); // Lc field
-            writer.Write((byte)((_bytes.Length >> 8) & 0xFF)); // High byte of length
-            writer.Write((byte)(_bytes.Length & 0xFF));        // Low byte of length
+            writer.PutByte(Cla);
+            writer.PutByte(UpdateCommand);
+            writer.PutUnsignedShort(0);
+            writer.PutByte((byte)(_bytes.Length + 2));
+            writer.PutUnsignedShort((ushort)_bytes.Length);
             writer.Write(_bytes);
             return stream.ToArray();
         }

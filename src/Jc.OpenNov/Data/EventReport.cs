@@ -55,7 +55,7 @@ public sealed class EventReport : Encodable
         {
             Field(() => Configuration!.GetEncodedSize(), (writer, _) =>
             {
-                writer.Write((short)Configuration.GetEncodedSize());
+                writer.PutUnsignedShort((ushort)Configuration.GetEncodedSize());
                 Configuration.WriteTo(writer);
             }, len => 2 + len);
         }

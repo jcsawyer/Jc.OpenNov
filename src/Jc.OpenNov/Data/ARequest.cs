@@ -5,13 +5,13 @@ namespace Jc.OpenNov.Data;
 
 public sealed class ARequest : Encodable
 {
-    public ushort Protocol { get; init; }
+    public uint Protocol { get; init; }
     public uint Version { get; init; }
     public ushort Elements { get; init; }
     public ApoepElement Apoep { get; init; }
 
     public ARequest(
-        ushort protocol,
+        uint protocol,
         uint version,
         ushort elements,
         ApoepElement apoep)
@@ -21,7 +21,7 @@ public sealed class ARequest : Encodable
         Elements = elements;
         Apoep = apoep;
         
-        Field(() => Protocol, WriteUnsignedShort, SizeOf);
+        Field(() => Protocol, WriteUnsignedInt, SizeOf);
         Field(() => Version, WriteUnsignedInt, SizeOf);
         Field(() => Elements, WriteUnsignedShort, SizeOf);
 

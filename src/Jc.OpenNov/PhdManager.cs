@@ -33,6 +33,11 @@ public sealed class PhdManager
         Request(update.ToByteArray());
 
         var readLen = Request(CreateReadPayload(0, 2));
+        if (!readLen.Success || readLen.Content.Length < 2)
+        {
+            throw new InvalidOperationException("Failed to read length of PHD packet.");
+        }
+        
         int len = new BinaryReader(readLen.Content).GetUnsignedShort();
 
         var reads = DecomposeNumber(len, MaxReadSize);
@@ -73,25 +78,16 @@ public sealed class PhdManager
         return (T)dataApdu.Payload;
     }
 
-    public T DecodeRequest<T>(byte[] input) where T : Encodable
-    {
-        var output = SendRequest(input);
-        using var stream = new MemoryStream(output);
-        using var reader = new BinaryReader(stream);
-        var apdu = Apdu.FromBinaryReader(reader);
-        var dataApdu = (DataApdu)apdu.Payload;
-        return (T)dataApdu.Payload;
-    }
-
     private byte[] CreateReadPayload(int offset, int length)
     {
-        return new byte[]
-        {
-            0x00,
+        return
+        [
+            NvpController.Cla,
+            NvpController.InsRb,
             (byte)((offset >> 8) & 0xFF),
             (byte)(offset & 0xFF),
             (byte)length
-        };
+        ];
     }
     
     private static List<int> DecomposeNumber(int n, int maxValue)

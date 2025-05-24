@@ -24,9 +24,17 @@ public class TestingDataReader : IDataReader
         return _queue.Dequeue();
     }
 
-    public void OnDataSent(byte[] data) => SentData.Add(data);
+    public void OnDataSent(byte[] data)
+    {
+        Console.WriteLine("Data sent: " + BitConverter.ToString(data));
+        SentData.Add(data);
+    }
 
-    public void OnDataReceived(byte[] data) => ReceivedData.Add(data);
+    public void OnDataReceived(byte[] data)
+    {
+        Console.WriteLine("Data received: " + BitConverter.ToString(data));
+        ReceivedData.Add(data);
+    }
 }
 
 public class ByteArrayStore

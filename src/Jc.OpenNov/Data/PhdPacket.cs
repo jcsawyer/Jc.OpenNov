@@ -49,20 +49,20 @@ public sealed class PhdPacket
 
     public static PhdPacket FromBinaryReader(BinaryReader reader)
     {
-        byte opcode = reader.ReadByte();
+        var opcode = reader.ReadByte();
         int typeLen = reader.ReadByte();
-        int payloadLen = reader.ReadByte() - 1;
+        var payloadLen = reader.ReadByte() - 1;
 
-        bool hasId = (opcode & Il) != 0;
-        int headerLen = hasId ? reader.ReadByte() : 0;
+        var hasId = (opcode & Il) != 0;
+        var headerLen = hasId ? reader.ReadByte() : 0;
 
-        byte[] protoId = reader.GetBytes(3);
-        byte[] header = hasId ? reader.ReadBytes(headerLen) : null;
+        var protoId = reader.GetBytes(3);
+        var header = hasId ? reader.ReadBytes(headerLen) : null;
 
         int chk = reader.ReadByte();
-        int remaining = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
-        int realLen = Math.Min(remaining, payloadLen);
-        byte[] content = reader.ReadBytes(realLen);
+        var remaining = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
+        var realLen = Math.Min(remaining, payloadLen);
+        var content = reader.ReadBytes(realLen);
 
         return new PhdPacket(
             opcode, typeLen, realLen,
@@ -76,26 +76,26 @@ public sealed class PhdPacket
         using var ms = new MemoryStream();
         using var writer = new BinaryWriter(ms);
 
-        bool hasId = Header != null && Header.Length > 0;
-        byte flags = (byte)(Mb | Me | Sr | (hasId ? Il : 0) | WellKnown);
+        var hasId = Header != null && Header.Length > 0;
+        var flags = (byte)(Mb | Me | Sr | (hasId ? Il : 0) | WellKnown);
 
-        writer.Write(flags);
-        writer.Write((byte)3); // TypeLen fixed
-        writer.Write((byte)(Content.Length + 1));
+        writer.PutByte(flags);
+        writer.PutByte(3); // TypeLen fixed
+        writer.PutByte((byte)(Content.Length + 1));
 
         if (hasId)
         {
-            writer.Write((byte)Header.Length);
+            writer.PutByte((byte)Header.Length);
         }
-
-        writer.Write("PHD"u8.ToArray());
-
+        
         if (hasId)
         {
             writer.Write(Header);
         }
 
-        writer.Write((byte)((Seq & 0x0F) | 0x80 | Chk));
+        writer.Write("PHD"u8.ToArray());
+
+        writer.PutByte((byte)((Seq & 0x0F) | 0x80 | Chk));
 
         if (Content.Length > 0)
         {

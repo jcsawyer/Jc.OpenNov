@@ -17,7 +17,7 @@ public static class EncodableExtensions
     public static void WriteUnsignedShort(BinaryWriter writer, ushort value) => writer.PutUnsignedShort(value);
     public static void WriteInt(BinaryWriter writer, int value) => writer.PutInt(value);
     public static void WriteUnsignedInt(BinaryWriter writer, uint value) => writer.PutUnsignedInt(value);
-    public static void WriteLong(BinaryWriter writer, long value) => writer.Write(value);
+    public static void WriteLong(BinaryWriter writer, long value) => writer.PutLong(value);
     public static void WriteUnsignedLong(BinaryWriter writer, ulong value) => writer.Write(value);
     public static void WriteByte(BinaryWriter writer, byte value) => writer.Write(value);
     public static void WriteUnsignedByte(BinaryWriter writer, byte value) => writer.Write(value);

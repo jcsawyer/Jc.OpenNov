@@ -14,7 +14,7 @@ public static class DataReaderExtensions
         using var br = new BinaryReader(ms);
 
         var dataSize = data.Length - 2;
-        var content = br.ReadBytes(dataSize);
+        var content = br.GetBytes(dataSize);
         var status = br.GetUnsignedShort() & 0xFFFF;
 
         return new TransceiveResult {
