@@ -33,10 +33,10 @@ public sealed class PhdManager
 
         Debug.WriteLine("PhdPacket: " + BitConverter.ToString(phd.ToByteArray()));
         Debug.WriteLine("T4Update: " + BitConverter.ToString(update.ToByteArray()));
-        
-        Request(update.ToByteArray());
 
-        var readLen = Request(CreateReadPayload(0, 2));
+        using (Request(update.ToByteArray()));
+
+        using var readLen = Request(CreateReadPayload(0, 2));
         if (!readLen.Success || readLen.Content.Length < 2)
         {
             throw new InvalidOperationException("Failed to read length of PHD packet.");
@@ -51,13 +51,13 @@ public sealed class PhdManager
         for (var index = 0; index < reads.Count; index++)
         {
             var readLength = reads[index];
-            var readResult = Request(CreateReadPayload(2 + index * MaxReadSize, readLength));
+            using var readResult = Request(CreateReadPayload(2 + index * MaxReadSize, readLength));
             Array.Copy(readResult.Content.ToArray(), 0, fullResult, offset, readLength);
             offset += readLength;
         }
         
         var ack = new T4Update([0xd0, 0x00, 0x00]);
-        _dataReader.ReadResult(ack.ToByteArray());
+        using (_dataReader.ReadResult(ack.ToByteArray()));
 
         using var buffer = new BinaryReader(new MemoryStream(fullResult));
         var resultPhd = PhdPacket.FromBinaryReader(buffer);

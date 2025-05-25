@@ -27,7 +27,7 @@ public sealed class ARequest : Encodable
 
         Field(() => Apoep.GetEncodedSize(), (w, _) =>
         {
-            var buffer = new MemoryStream();
+            using var buffer = new MemoryStream();
             using var subWriter = new BinaryWriter(buffer);
             Apoep.WriteTo(subWriter);
             var data = buffer.ToArray();

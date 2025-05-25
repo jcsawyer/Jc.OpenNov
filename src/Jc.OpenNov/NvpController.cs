@@ -28,23 +28,23 @@ public sealed class NvpController
     
     public PenResult DataRead(Func<string, List<InsulinDose>, bool>? stopCondition = null)
         {
-            _dataReader.ReadResult(PayloadFunctions.ApplicationSelect());
-            _dataReader.ReadResult(PayloadFunctions.CapabilityContainerSelect());
-            _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 15));
-            _dataReader.ReadResult(PayloadFunctions.NdefSelect());
+            using (_dataReader.ReadResult(PayloadFunctions.ApplicationSelect()));
+            using (_dataReader.ReadResult(PayloadFunctions.CapabilityContainerSelect()));
+            using (_dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 15)));
+            using (_dataReader.ReadResult(PayloadFunctions.NdefSelect()));
 
             return RetrieveConfiguration(stopCondition ?? ((_, _) => false));
         }
 
         private PenResult RetrieveConfiguration(Func<string, List<InsulinDose>, bool> stopCondition)
         {
-            var lengthResult = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 2));
+            using var lengthResult = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 2));
             int length = new BinaryReader(lengthResult.Content).GetShort();
 
-            var fullRead = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(2, length));
+            using var fullRead = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(2, length));
 
             var ack = new T4Update([0xD0, 0x00, 0x00]);
-            _dataReader.ReadResult(ack.ToByteArray());
+            using (_dataReader.ReadResult(ack.ToByteArray()));
 
             using var fullReadReader = new BinaryReader(fullRead.Content);
             var phdPacket = PhdPacket.FromBinaryReader(fullReadReader);
