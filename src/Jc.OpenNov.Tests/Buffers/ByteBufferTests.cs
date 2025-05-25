@@ -1,3 +1,5 @@
+using Jc.OpenNov.Utilities;
+
 namespace Jc.OpenNov.Tests.Buffers;
 
 [TestFixture]
