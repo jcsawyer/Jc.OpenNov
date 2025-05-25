@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Jc.OpenNov.Buffers;
 
 namespace Jc.OpenNov.Data;
@@ -25,6 +26,12 @@ public sealed class PhdPacket
     {
         Seq = seq;
         Content = data;
+        OpCode = unchecked((byte)-1);
+        TypeLen = -1;
+        PayloadLen = -1;
+        HeaderLen = null;
+        Header = null;
+        Chk = 0;
     }
 
     public PhdPacket(
@@ -56,7 +63,7 @@ public sealed class PhdPacket
         var hasId = (opcode & Il) != 0;
         var headerLen = hasId ? reader.ReadByte() : 0;
 
-        var protoId = reader.GetBytes(3);
+        _ = reader.ReadBytes(3); // proto id
         var header = hasId ? reader.ReadBytes(headerLen) : null;
 
         int chk = reader.ReadByte();
@@ -66,42 +73,42 @@ public sealed class PhdPacket
 
         return new PhdPacket(
             opcode, typeLen, realLen,
-            hasId ? headerLen : (int?)null,
+            hasId ? headerLen : null,
             header, chk & 0x0F, chk, content
         );
     }
 
     public byte[] ToByteArray()
     {
-        using var ms = new MemoryStream();
+        var iLen = Content.Length;
+        var idLen = Header?.Length ?? 0;
+        var hasId = idLen > 0;
+
+        var totalLen = idLen + iLen + 7; // all parts
+        var buffer = new byte[totalLen];
+
+        using var ms = new MemoryStream(buffer);
         using var writer = new BinaryWriter(ms);
 
-        var hasId = Header != null && Header.Length > 0;
         var flags = (byte)(Mb | Me | Sr | (hasId ? Il : 0) | WellKnown);
-
+        Debug.WriteLine($"Flags: ox{flags:X2}");
         writer.PutByte(flags);
-        writer.PutByte(3); // TypeLen fixed
-        writer.PutByte((byte)(Content.Length + 1));
+        writer.PutByte(3); // Type length for "PHD"
+        writer.PutByte((byte)(iLen + 1)); // Payload + 1 for seq/chk
 
-        if (hasId)
-        {
-            writer.PutByte((byte)Header.Length);
-        }
-        
         if (hasId)
         {
             writer.Write(Header);
         }
 
         writer.Write("PHD"u8.ToArray());
+        writer.PutByte((byte)(Seq & 0x0F | 0x80 | Chk));
 
-        writer.PutByte((byte)((Seq & 0x0F) | 0x80 | Chk));
-
-        if (Content.Length > 0)
+        if (iLen > 0)
         {
             writer.Write(Content);
         }
 
-        return ms.ToArray();
+        return buffer;
     }
 }

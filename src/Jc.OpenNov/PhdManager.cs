@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Jc.OpenNov.Buffers;
 using Jc.OpenNov.Data;
 
@@ -8,7 +9,7 @@ public sealed class PhdManager
     private const int MaxReadSize = 255;
 
     private readonly IDataReader _dataReader;
-    private int sequence = 0;
+    private int sequence = 1;
 
     public PhdManager(IDataReader dataReader)
     {
@@ -30,6 +31,9 @@ public sealed class PhdManager
         var phd = new PhdPacket(sequence++, data);
         var update = new T4Update(phd.ToByteArray());
 
+        Debug.WriteLine("PhdPacket: " + BitConverter.ToString(phd.ToByteArray()));
+        Debug.WriteLine("T4Update: " + BitConverter.ToString(update.ToByteArray()));
+        
         Request(update.ToByteArray());
 
         var readLen = Request(CreateReadPayload(0, 2));
@@ -57,8 +61,12 @@ public sealed class PhdManager
 
         using var buffer = new BinaryReader(new MemoryStream(fullResult));
         var resultPhd = PhdPacket.FromBinaryReader(buffer);
+
+        Debug.WriteLine($"Received packet with seq={resultPhd.Seq}");
         
         sequence = resultPhd.Seq + 1;
+        
+        Debug.WriteLine($"Sending ACK for seq={resultPhd.Seq}");
 
         return resultPhd.Content;
     }

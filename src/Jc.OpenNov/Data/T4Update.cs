@@ -16,16 +16,17 @@ public sealed class T4Update
 
     public byte[] ToByteArray()
     {
-        using (var stream = new MemoryStream())
-        using (var writer = new BinaryWriter(stream))
-        {
-            writer.PutByte(Cla);
-            writer.PutByte(UpdateCommand);
-            writer.PutUnsignedShort(0);
-            writer.PutByte((byte)(_bytes.Length + 2));
-            writer.PutUnsignedShort((ushort)_bytes.Length);
-            writer.Write(_bytes);
-            return stream.ToArray();
-        }
+        var buffer = new byte[_bytes.Length + 7];
+        using var stream = new MemoryStream(buffer);
+        using var writer = new BinaryWriter(stream);
+        
+        writer.PutByte(Cla);
+        writer.PutByte(UpdateCommand);
+        writer.PutUnsignedShort(0);
+        writer.PutByte((byte)(_bytes.Length + 2));
+        writer.PutUnsignedShort((ushort)_bytes.Length);
+        writer.Write(_bytes);
+        
+        return buffer;
     }
 }
