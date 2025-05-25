@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Jc.OpenNov.Buffers;
+namespace Jc.OpenNov.Utilities;
 
 public static class ByteBufferExtensions
 {

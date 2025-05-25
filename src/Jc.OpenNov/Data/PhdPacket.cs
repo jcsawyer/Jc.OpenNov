@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Jc.OpenNov.Buffers;
 
 namespace Jc.OpenNov.Data;
 
@@ -87,7 +86,7 @@ public sealed class PhdPacket
         var totalLen = idLen + iLen + 7;
         var buffer = new byte[totalLen];
         var span = buffer.AsSpan();
-        int offset = 0;
+        var offset = 0;
 
         var flags = (byte)(Mb | Me | Sr | (hasId ? Il : 0) | WellKnown);
         Debug.WriteLine($"Flags: ox{flags:X2}");

@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using Jc.OpenNov.Buffers;
 using Jc.OpenNov.Data;
+using Jc.OpenNov.Utilities;
 
 namespace Jc.OpenNov;
 
@@ -46,11 +46,11 @@ public sealed class PhdManager
 
         var reads = DecomposeNumber(len, MaxReadSize);
         var fullResult = new byte[len];
-        int offset = 0;
+        var offset = 0;
 
-        for (int index = 0; index < reads.Count; index++)
+        for (var index = 0; index < reads.Count; index++)
         {
-            int readLength = reads[index];
+            var readLength = reads[index];
             var readResult = Request(CreateReadPayload(2 + index * MaxReadSize, readLength));
             Array.Copy(readResult.Content.ToArray(), 0, fullResult, offset, readLength);
             offset += readLength;

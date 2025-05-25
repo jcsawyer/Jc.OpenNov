@@ -1,7 +1,6 @@
 using System.Buffers.Binary;
+using Jc.OpenNov.Utilities;
 using static Jc.OpenNov.Utilities.EncodableExtensions;
-
-using Jc.OpenNov.Buffers;
 
 namespace Jc.OpenNov.Data;
 

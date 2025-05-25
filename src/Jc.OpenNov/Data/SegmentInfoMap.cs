@@ -1,4 +1,4 @@
-using Jc.OpenNov.Buffers;
+using Jc.OpenNov.Utilities;
 
 namespace Jc.OpenNov.Data;
 

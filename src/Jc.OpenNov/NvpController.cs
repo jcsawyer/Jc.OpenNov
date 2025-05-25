@@ -1,5 +1,5 @@
-using Jc.OpenNov.Buffers;
 using Jc.OpenNov.Data;
+using Jc.OpenNov.Utilities;
 
 namespace Jc.OpenNov;
 
@@ -75,9 +75,9 @@ public sealed class NvpController
                     PayloadFunctions.AskInformation(dataApdu.InvokeId, configuration)
                 );
 
-                string model = string.Join(" ", info.Model);
-                string serial = info.Specification.Serial;
-                long startTime = info.RelativeTime;
+                var model = string.Join(" ", info.Model);
+                var serial = info.Specification.Serial;
+                var startTime = info.RelativeTime;
 
                 var doseList = new List<InsulinDose>();
 

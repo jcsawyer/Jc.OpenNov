@@ -28,21 +28,21 @@ public static class HexUtils
 
             result.Append("\n0x").Append(ToHexString(offset));
 
-            for (int i = offset; i < offset + length; i++)
+            for (var i = offset; i < offset + length; i++)
             {
                 if (lineIndex == LineSize)
                 {
                     result.Append(" ");
-                    for (int j = 0; j < LineSize; j++)
+                    for (var j = 0; j < LineSize; j++)
                     {
-                        byte b = line[j];
+                        var b = line[j];
                         result.Append((b > 0x20 && b < 0x7E) ? (char)b : '.');
                     }
                     result.Append("\n0x").Append(ToHexString(i));
                     lineIndex = 0;
                 }
 
-                byte b2 = array[i];
+                var b2 = array[i];
                 result.Append(" ")
                       .Append(HexDigits[(b2 >> 4) & 0x0F])
                       .Append(HexDigits[b2 & 0x0F]);
@@ -51,11 +51,11 @@ public static class HexUtils
 
             if (lineIndex != LineSize)
             {
-                int count = (LineSize - lineIndex) * 3 + 1;
+                var count = (LineSize - lineIndex) * 3 + 1;
                 result.Append(' ', count);
-                for (int i = 0; i < lineIndex; i++)
+                for (var i = 0; i < lineIndex; i++)
                 {
-                    byte b = line[i];
+                    var b = line[i];
                     result.Append((b > 0x20 && b < 0x7E) ? (char)b : '.');
                 }
             }
@@ -67,11 +67,11 @@ public static class HexUtils
         {
             if (length == -1) length = array.Length;
             var buf = new char[length * 2];
-            int bufIndex = 0;
+            var bufIndex = 0;
 
-            for (int i = offset; i < offset + length; i++)
+            for (var i = offset; i < offset + length; i++)
             {
-                byte b = array[i];
+                var b = array[i];
                 buf[bufIndex++] = HexDigits[(b >> 4) & 0x0F];
                 buf[bufIndex++] = HexDigits[b & 0x0F];
             }
@@ -124,18 +124,18 @@ public static class HexUtils
 
         public static HexDumpLine ParseHexDumpLine(string input)
         {
-            int len = (input.Length - 11) / 4;
+            var len = (input.Length - 11) / 4;
             if (len < 0 || len > 16 || !input.StartsWith("0x"))
                 throw new ArgumentException("Wrong hexdump input");
 
-            int index = int.Parse(input.Substring(2, 8), NumberStyles.HexNumber);
+            var index = int.Parse(input.Substring(2, 8), NumberStyles.HexNumber);
             var data = new List<byte>();
 
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 try
                 {
-                    string num = input.Substring(11 + i * 3, 2);
+                    var num = input.Substring(11 + i * 3, 2);
                     if (!string.IsNullOrWhiteSpace(num))
                         data.Add(Convert.ToByte(num, 16));
                 }

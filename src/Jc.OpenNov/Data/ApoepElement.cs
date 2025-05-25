@@ -1,4 +1,4 @@
-using Jc.OpenNov.Buffers;
+using Jc.OpenNov.Utilities;
 using static Jc.OpenNov.Utilities.EncodableExtensions;
 
 namespace Jc.OpenNov.Data;
