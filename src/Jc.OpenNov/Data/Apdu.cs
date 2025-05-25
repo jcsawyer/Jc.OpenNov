@@ -24,7 +24,6 @@ public sealed class Apdu : Encodable
         Field(() => At, WriteUnsignedShort, SizeOf);
         Field(Payload.GetEncodedSize, (w, len) =>
         {
-            //WriteShort(w, (short)Payload.GetEncodedSize());
             WriteByteArray(w, Payload.ToByteArray());
         }, len => 2 + len);
     }

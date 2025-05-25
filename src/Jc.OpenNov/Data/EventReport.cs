@@ -50,15 +50,6 @@ public sealed class EventReport : Encodable
             {
                 Field(() => dose, (writer, d) => d.WriteTo(writer), d => d.GetEncodedSize());
             }
-            
-            //foreach (var dose in InsulinDoses)
-            //{
-            //    var capturedDose = dose;
-            //    Field(GetEncodedSize, (writer, _) =>
-            //    {
-            //        capturedDose.WriteTo(writer);
-            //    }, len => len);
-            //}
         }
         else if (EventType == MdcNotiConfig && Configuration != null)
         {
@@ -77,32 +68,35 @@ public sealed class EventReport : Encodable
         var eventType = reader.GetUnsignedShort();
         _ = reader.GetUnsignedShort(); // len
 
-        if (eventType == MdcNotiSegmentData)
+        switch (eventType)
         {
-            var instance = reader.GetUnsignedShort();
-            var index = (int)reader.GetUnsignedInt();
-            var count = reader.GetUnsignedInt();
-            _ = reader.GetUnsignedShort(); // status
-            _ = reader.GetUnsignedShort(); // bcount
-
-            var doses = new List<InsulinDose>();
-            var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-            for (var i = 0; i < count; i++)
+            case MdcNotiSegmentData:
             {
-                var dose = InsulinDose.ReadFrom(reader);
-                dose = dose.WithUtcTime(relativeTime, currentTime);
-                doses.Add(dose);
+                var instance = reader.GetUnsignedShort();
+                var index = (int)reader.GetUnsignedInt();
+                var count = reader.GetUnsignedInt();
+                _ = reader.GetUnsignedShort(); // status
+                _ = reader.GetUnsignedShort(); // bcount
+
+                var doses = new List<InsulinDose>();
+                var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+                for (var i = 0; i < count; i++)
+                {
+                    var dose = InsulinDose.ReadFrom(reader);
+                    dose = dose.WithUtcTime(relativeTime, currentTime);
+                    doses.Add(dose);
+                }
+
+                return new EventReport(handle, relativeTime, eventType, null, (short)instance, index, doses);
             }
-
-            return new EventReport(handle, relativeTime, eventType, null, (short)instance, index, doses);
+            case MdcNotiConfig:
+            {
+                var config = Configuration.ReadFrom(reader);
+                return new EventReport(handle, relativeTime, eventType, config);
+            }
+            default:
+                return new EventReport(handle, relativeTime, eventType);
         }
-        else if (eventType == MdcNotiConfig)
-        {
-            var config = Configuration.ReadFrom(reader);
-            return new EventReport(handle, relativeTime, eventType, config);
-        }
-
-        return new EventReport(handle, relativeTime, eventType);
     }
 }

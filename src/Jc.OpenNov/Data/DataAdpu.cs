@@ -33,10 +33,8 @@ public sealed class DataApdu : Encodable
         {
             Field(() => Payload.GetEncodedSize() + 2, (w, len) =>
             {
-                //WriteShort(w, (short)Payload.GetEncodedSize());
                 WriteByteArray(w, Payload.ToByteArray());
             }, len => 2 + len);
-            //Field(() => Payload, (w, p) => WriteByteArray(w, p.ToByteArray()), _ => (Payload?.GetEncodedSize() ?? 0) + );
         }
     }
 

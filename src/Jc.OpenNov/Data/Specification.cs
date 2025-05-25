@@ -21,10 +21,10 @@ public sealed class Specification
         SoftwareRevision = softwareRevision;
     }
 
-    private const int SERIAL_NUMBER = 1;
-    private const int PART_NUMBER = 2;
-    private const int HW_VERSION = 3;
-    private const int SW_VERSION = 4;
+    private const int SerialNumber = 1;
+    private const int PartNumberVersion = 2;
+    private const int HwVersion = 3;
+    private const int SwVersion = 4;
 
     public static Specification FromByteBuffer(BinaryReader reader)
     {
@@ -44,16 +44,16 @@ public sealed class Specification
 
             switch (type)
             {
-                case SERIAL_NUMBER:
+                case SerialNumber:
                     serial = value;
                     break;
-                case PART_NUMBER:
+                case PartNumberVersion:
                     partNumber = value;
                     break;
-                case HW_VERSION:
+                case HwVersion:
                     hardwareRevision = value;
                     break;
-                case SW_VERSION:
+                case SwVersion:
                     softwareRevision = value;
                     break;
             }

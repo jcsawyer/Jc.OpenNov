@@ -40,8 +40,6 @@ public static class PayloadFunctions
             return ms.ToArray();
         }
 
-        // === APDU Builders ===
-
         public static Apdu RetrieveInformation(ushort invokeId, Configuration config)
         {
             var buffer = new byte[4];
