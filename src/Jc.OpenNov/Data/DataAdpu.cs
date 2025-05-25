@@ -31,7 +31,12 @@ public sealed class DataApdu : Encodable
 
         if (Payload != null)
         {
-            Field(() => Payload, (w, p) => WriteByteArray(w, p.ToByteArray()), _ => (Payload?.GetEncodedSize() ?? 0) + 4);
+            Field(() => Payload.GetEncodedSize() + 2, (w, len) =>
+            {
+                //WriteShort(w, (short)Payload.GetEncodedSize());
+                WriteByteArray(w, Payload.ToByteArray());
+            }, len => 2 + len);
+            //Field(() => Payload, (w, p) => WriteByteArray(w, p.ToByteArray()), _ => (Payload?.GetEncodedSize() ?? 0) + );
         }
     }
 
@@ -84,14 +89,18 @@ public sealed class DataApdu : Encodable
 
     public int EncodedSize()
     {
-        return (Payload?.GetEncodedSize() ?? 0);
+        return 6 + (Payload?.GetEncodedSize() + 2 ?? 0);
     }
 
     public override byte[] ToByteArray()
     {
-        using var ms = new MemoryStream();
+        var payloadSize = Payload?.GetEncodedSize() + 2 ?? 0;
+        var buffer = new byte[EncodedSize()];
+        
+        using var ms = new MemoryStream(buffer);
         using var writer = new BinaryWriter(ms);
 
+        writer.PutUnsignedShort((ushort)(payloadSize + 4));
         writer.PutUnsignedShort(InvokeId);
         writer.PutUnsignedShort(DChoice);
 

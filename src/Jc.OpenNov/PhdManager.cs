@@ -62,11 +62,7 @@ public sealed class PhdManager
         using var buffer = new BinaryReader(new MemoryStream(fullResult));
         var resultPhd = PhdPacket.FromBinaryReader(buffer);
 
-        Debug.WriteLine($"Received packet with seq={resultPhd.Seq}");
-        
         sequence = resultPhd.Seq + 1;
-        
-        Debug.WriteLine($"Sending ACK for seq={resultPhd.Seq}");
 
         return resultPhd.Content;
     }

@@ -47,8 +47,9 @@ public sealed class Configuration : Encodable
 
             var data = ms.ToArray();
 
-            WriteShort(w, (short)data.Length);
-            w.Write(data);
+            //WriteShort(w, (short)data.Length);
+            WriteByteArray(w, data);
+            //w.Write(data);
         }, len => 2 + len);
     }
 

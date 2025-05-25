@@ -21,6 +21,7 @@ internal static class AppBuilderExtensions
                         if (result is PenResult.Success success)
                         {
                             // Handle successful data read
+                            Debug.WriteLine("Data read: " + success.Data);
                         }
                         else if (result is PenResult.Failure failure)
                         {

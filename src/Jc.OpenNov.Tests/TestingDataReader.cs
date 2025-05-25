@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,12 +28,14 @@ public class TestingDataReader : IDataReader
     public void OnDataSent(byte[] data)
     {
         Console.WriteLine("Data sent: " + BitConverter.ToString(data));
+        Debug.WriteLine("Data sent: " + BitConverter.ToString(data));
         SentData.Add(data);
     }
 
     public void OnDataReceived(byte[] data)
     {
         Console.WriteLine("Data received: " + BitConverter.ToString(data));
+        Debug.WriteLine("Data received: " + BitConverter.ToString(data));
         ReceivedData.Add(data);
     }
 }

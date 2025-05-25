@@ -48,8 +48,17 @@ public sealed class EventReport : Encodable
 
             foreach (var dose in InsulinDoses)
             {
-                Field(() => dose.GetEncodedSize(), (writer, _) => { dose.WriteTo(writer); }, len => len);
+                Field(() => dose, (writer, d) => d.WriteTo(writer), d => d.GetEncodedSize());
             }
+            
+            //foreach (var dose in InsulinDoses)
+            //{
+            //    var capturedDose = dose;
+            //    Field(GetEncodedSize, (writer, _) =>
+            //    {
+            //        capturedDose.WriteTo(writer);
+            //    }, len => len);
+            //}
         }
         else if (EventType == MdcNotiConfig && Configuration != null)
         {

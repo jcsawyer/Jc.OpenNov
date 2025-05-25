@@ -44,11 +44,11 @@ public static class PayloadFunctions
 
         public static Apdu RetrieveInformation(ushort invokeId, Configuration config)
         {
-            using var ms = new MemoryStream(4);
+            var buffer = new byte[4];
+            using var ms = new MemoryStream(buffer);
             using var writer = new BinaryWriter(ms);
             writer.PutUnsignedShort(config.Id);
             writer.PutUnsignedShort(0);
-            ms.Seek(0, SeekOrigin.Begin);
             return new Apdu(
                 Apdu.Prst,
                 new DataApdu(
@@ -58,7 +58,7 @@ public static class PayloadFunctions
                         handle: 0,
                         currentTime: 0,
                         type: EventReport.MdcNotiConfig,
-                        data: ms.ToArray()
+                        data: buffer.ToArray()
                     )
                 )
             );

@@ -1,4 +1,5 @@
 using Jc.OpenNov.Buffers;
+using Jc.OpenNov.Utilities;
 
 namespace Jc.OpenNov.Data;
 
@@ -23,9 +24,8 @@ public sealed class T4Update
         writer.PutByte(Cla);
         writer.PutByte(UpdateCommand);
         writer.PutUnsignedShort(0);
-        writer.PutByte((byte)(_bytes.Length + 2));
-        writer.PutUnsignedShort((ushort)_bytes.Length);
-        writer.Write(_bytes);
+        writer.PutByte((byte)((_bytes.Length) + 2));
+        EncodableExtensions.WriteByteArray(writer, _bytes);
         
         return buffer;
     }
