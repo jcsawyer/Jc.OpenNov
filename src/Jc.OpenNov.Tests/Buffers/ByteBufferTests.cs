@@ -124,34 +124,4 @@ internal sealed class ByteBufferTests
             Assert.That(bytes[2], Is.EqualTo(0x56));
         });
     }
-
-    [Test]
-    public void GetBits_Should_Read_Bytes_And_Return_BitSet()
-    {
-        _writer.Write(new byte[] { 0xAA, 0xBB });
-        _stream.Position = 0;
-
-        var bitSet = _reader.GetBits(2);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(bitSet.GetBits(0, 8), Is.EqualTo(0xAA));
-            Assert.That(bitSet.GetBits(8, 8), Is.EqualTo(0xBB));
-        });
-    }
-
-    [Test]
-    public void GetBits_With_Reverse_Should_Return_Reversed_BitSet()
-    {
-        _writer.Write(new byte[] { 0x11, 0x22 });
-        _stream.Position = 0;
-
-        var bitSet = _reader.GetBits(2, true);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(bitSet.GetBits(0, 8), Is.EqualTo(0x22));
-            Assert.That(bitSet.GetBits(8, 8), Is.EqualTo(0x11));
-        });
-    }
 }

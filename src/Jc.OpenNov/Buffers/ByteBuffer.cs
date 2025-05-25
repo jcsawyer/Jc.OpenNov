@@ -125,22 +125,6 @@ public static class ByteBufferExtensions
         return reader.ReadBytes(length);
     }
 
-    public static BitSet GetBits(this BinaryReader reader, int byteLength, bool reverse)
-    {
-        var bytes = reader.ReadBytes(byteLength);
-        if (reverse)
-        {
-            Array.Reverse(bytes);
-        }
-
-        return BitSet.ValueOf(bytes);
-    }
-
-    public static BitSet GetBits(this BinaryReader reader, int byteLength)
-    {
-        return GetBits(reader, byteLength, false);
-    }
-
     public static string GetIndexedString(this BinaryReader reader)
     {
         return Encoding.ASCII.GetString(reader.GetBytes()).Replace("\0", "");
