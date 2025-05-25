@@ -1,5 +1,4 @@
-using Jc.OpenNov.Buffers;
-using Jc.OpenNov.Utilities;
+using System.Buffers.Binary;
 
 namespace Jc.OpenNov.Data;
 
@@ -17,16 +16,18 @@ public sealed class T4Update
 
     public byte[] ToByteArray()
     {
+        // Allocate the buffer on the heap
         var buffer = new byte[_bytes.Length + 7];
-        using var stream = new MemoryStream(buffer);
-        using var writer = new BinaryWriter(stream);
-        
-        writer.PutByte(Cla);
-        writer.PutByte(UpdateCommand);
-        writer.PutUnsignedShort(0);
-        writer.PutByte((byte)((_bytes.Length) + 2));
-        EncodableExtensions.WriteByteArray(writer, _bytes);
-        
+        var span = buffer.AsSpan();
+
+        // Write directly to the span without slicing repeatedly
+        span[0] = Cla;
+        span[1] = UpdateCommand;
+        BinaryPrimitives.WriteUInt16BigEndian(span[2..], 0);
+        span[4] = (byte)(_bytes.Length + 2);
+        BinaryPrimitives.WriteUInt16BigEndian(span[5..], (ushort)_bytes.Length);
+        _bytes.CopyTo(span[7..]);
+
         return buffer;
     }
 }

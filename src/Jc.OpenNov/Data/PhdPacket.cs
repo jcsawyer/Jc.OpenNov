@@ -84,29 +84,33 @@ public sealed class PhdPacket
         var idLen = Header?.Length ?? 0;
         var hasId = idLen > 0;
 
-        var totalLen = idLen + iLen + 7; // all parts
+        var totalLen = idLen + iLen + 7;
         var buffer = new byte[totalLen];
-
-        using var ms = new MemoryStream(buffer);
-        using var writer = new BinaryWriter(ms);
+        var span = buffer.AsSpan();
+        int offset = 0;
 
         var flags = (byte)(Mb | Me | Sr | (hasId ? Il : 0) | WellKnown);
         Debug.WriteLine($"Flags: ox{flags:X2}");
-        writer.PutByte(flags);
-        writer.PutByte(3); // Type length for "PHD"
-        writer.PutByte((byte)(iLen + 1)); // Payload + 1 for seq/chk
+        span[offset++] = flags;
+        span[offset++] = 3; // Type length for "PHD"
+        span[offset++] = (byte)(iLen + 1); // Payload + 1 for seq/chk
 
         if (hasId)
         {
-            writer.Write(Header);
+            Header.CopyTo(span.Slice(offset, idLen));
+            offset += idLen;
         }
 
-        writer.Write("PHD"u8.ToArray());
-        writer.PutByte((byte)(Seq & 0x0F | 0x80 | Chk));
+        // Write "PHD"
+        var phdBytes = "PHD"u8;
+        phdBytes.CopyTo(span.Slice(offset, 3));
+        offset += 3;
+
+        span[offset++] = (byte)(Seq & 0x0F | 0x80 | Chk);
 
         if (iLen > 0)
         {
-            writer.Write(Content);
+            Content.CopyTo(span.Slice(offset, iLen));
         }
 
         return buffer;

@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using static Jc.OpenNov.Utilities.EncodableExtensions;
 
 using Jc.OpenNov.Buffers;
@@ -85,7 +86,7 @@ public sealed class DataApdu : Encodable
         return FullSpecification.FromAttributes(attributes);
     }
 
-    public int EncodedSize()
+    private int EncodedSize()
     {
         return 6 + (Payload?.GetEncodedSize() + 2 ?? 0);
     }
@@ -94,20 +95,20 @@ public sealed class DataApdu : Encodable
     {
         var payloadSize = Payload?.GetEncodedSize() + 2 ?? 0;
         var buffer = new byte[EncodedSize()];
-        
-        using var ms = new MemoryStream(buffer);
-        using var writer = new BinaryWriter(ms);
+        var span = buffer.AsSpan();
 
-        writer.PutUnsignedShort((ushort)(payloadSize + 4));
-        writer.PutUnsignedShort(InvokeId);
-        writer.PutUnsignedShort(DChoice);
+        BinaryPrimitives.WriteUInt16BigEndian(span[..2], (ushort)(payloadSize + 4));
+        BinaryPrimitives.WriteUInt16BigEndian(span[2..], InvokeId);
+        BinaryPrimitives.WriteUInt16BigEndian(span[4..], DChoice);
 
-        if (Payload != null)
+        if (Payload == null)
         {
-            writer.PutUnsignedShort((ushort)Payload.GetEncodedSize());
-            writer.Write(Payload.ToByteArray());
+            return buffer;
         }
+        
+        BinaryPrimitives.WriteUInt16BigEndian(span[6..], (ushort)Payload.GetEncodedSize());
+        Payload.ToByteArray().CopyTo(span[8..]);
 
-        return ms.ToArray();
+        return buffer;
     }
 }

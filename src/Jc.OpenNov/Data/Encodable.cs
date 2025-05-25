@@ -23,9 +23,10 @@ public class Encodable : IEncodable
 
     public virtual byte[] ToByteArray()
     {
-        using var ms = new MemoryStream();
-        using var writer = new BinaryWriter(ms);
+        var size = GetEncodedSize();
+        var buffer = new byte[size];
+        using var writer = new BinaryWriter(new MemoryStream(buffer));
         WriteTo(writer);
-        return ms.ToArray();
+        return buffer;
     }
 }
