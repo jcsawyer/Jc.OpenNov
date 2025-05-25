@@ -51,14 +51,14 @@ public sealed class PhdManager
             Array.Copy(readResult.Content.ToArray(), 0, fullResult, offset, readLength);
             offset += readLength;
         }
+        
+        var ack = new T4Update([0xd0, 0x00, 0x00]);
+        _dataReader.ReadResult(ack.ToByteArray());
 
         using var buffer = new BinaryReader(new MemoryStream(fullResult));
         var resultPhd = PhdPacket.FromBinaryReader(buffer);
-
+        
         sequence = resultPhd.Seq + 1;
-
-        var ack = new T4Update(new byte[] { 0xd0, 0x00, 0x00 });
-        _dataReader.ReadResult(ack.ToByteArray());
 
         return resultPhd.Content;
     }

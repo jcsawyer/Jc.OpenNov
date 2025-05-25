@@ -35,7 +35,7 @@ public static class PayloadFunctions
             writer.PutByte((byte)p1);
             writer.PutByte((byte)p2);
             writer.PutByte((byte)data.Length);
-            ms.Write(data, 0, data.Length);
+            writer.Write(data);
             if (le) writer.PutByte(0x00);
             return ms.ToArray();
         }

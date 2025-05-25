@@ -43,7 +43,7 @@ public sealed class NvpController
 
             var fullRead = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(2, length));
 
-            var ack = new T4Update(new byte[] { 0xd0, 0x00, 0x00 });
+            var ack = new T4Update([0xD0, 0x00, 0x00]);
             _dataReader.ReadResult(ack.ToByteArray());
 
             using var fullReadReader = new BinaryReader(fullRead.Content);
