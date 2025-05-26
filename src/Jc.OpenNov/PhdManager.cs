@@ -23,7 +23,7 @@ public sealed class PhdManager
 
     public byte[] SendEmptyRequest()
     {
-        return SendRequest(Array.Empty<byte>());
+        return SendRequest([]);
     }
 
     private byte[] SendRequest(byte[] data)
@@ -93,8 +93,8 @@ public sealed class PhdManager
             (byte)length
         ];
     }
-    
-    private static List<int> DecomposeNumber(int n, int maxValue)
+
+    internal static List<int> DecomposeNumber(int n, int maxValue)
     {
         var times = n / maxValue;
         var remainder = n % maxValue;

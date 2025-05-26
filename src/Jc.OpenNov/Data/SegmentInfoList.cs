@@ -8,7 +8,7 @@ public sealed class SegmentInfoList : Encodable
 
     public SegmentInfoList(List<SegmentInfo>? items = null)
     {
-        Items = items ?? new List<SegmentInfo>();
+        Items = items ?? [];
     }
 
     public static SegmentInfoList FromBinaryReader(BinaryReader reader)

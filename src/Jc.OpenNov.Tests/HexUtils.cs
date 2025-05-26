@@ -5,10 +5,11 @@ namespace Jc.OpenNov.Tests;
 
 public static class HexUtils
     {
-        private static readonly char[] HexDigits = {
+        private static readonly char[] HexDigits =
+        [
             '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-        };
+        ];
 
         private const int LineSize = 16;
 
@@ -86,13 +87,13 @@ public static class HexUtils
 
         public static byte[] ToByteArray(int i)
         {
-            return new byte[]
-            {
+            return
+            [
                 (byte)((i >> 24) & 0xFF),
                 (byte)((i >> 16) & 0xFF),
                 (byte)((i >> 8) & 0xFF),
                 (byte)(i & 0xFF)
-            };
+            ];
         }
 
         private static int ToByte(char c)

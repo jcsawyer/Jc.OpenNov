@@ -2,7 +2,7 @@ namespace Jc.OpenNov.Data;
 
 public class Encodable : IEncodable
 {
-    protected readonly List<object> Fields = new();
+    protected readonly List<object> Fields = [];
 
     protected void Field<T>(Func<T> getter, Action<BinaryWriter, T> serializer, Func<T, int> sizeFunc)
     {

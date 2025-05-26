@@ -32,7 +32,7 @@ public sealed class EventReport : Encodable
         Configuration = configuration;
         Instance = instance;
         Index = index;
-        InsulinDoses = insulinDoses ?? new List<InsulinDose>();
+        InsulinDoses = insulinDoses ?? [];
 
         Field(() => Handle, WriteUnsignedShort, SizeOf);
         Field(() => RelativeTime, WriteUnsignedInt, SizeOf);
@@ -42,7 +42,7 @@ public sealed class EventReport : Encodable
         {
             Field(() => Instance, WriteShort, SizeOf);
             Field(() => Index, WriteInt, SizeOf);
-            Field(() => (int)InsulinDoses.Count, WriteInt, SizeOf);
+            Field(() => InsulinDoses.Count, WriteInt, SizeOf);
             Field(() => (short)0, WriteShort, SizeOf); // status placeholder
             Field(() => (short)0, WriteShort, SizeOf); // bcount placeholder
 

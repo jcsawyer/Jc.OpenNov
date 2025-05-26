@@ -11,9 +11,9 @@ public sealed class NvpController
     internal const byte ByName = 0x04;
     internal const byte FirstOnly = 0x0C;
 
-    internal static readonly byte[] NdefTagApplicationSelect = { 0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01 };
-    internal static readonly byte[] CapabilityContainerSelect = { 0xE1, 0x03 };
-    internal static readonly byte[] NdefSelect = { 0xE1, 0x04 };
+    internal static readonly byte[] NdefTagApplicationSelect = [0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01];
+    internal static readonly byte[] CapabilityContainerSelect = [0xE1, 0x03];
+    internal static readonly byte[] NdefSelect = [0xE1, 0x04];
 
     public const ushort CommandCompleted = 0x9000;
 

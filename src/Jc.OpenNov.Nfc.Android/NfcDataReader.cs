@@ -11,7 +11,7 @@ public class NfcDataReader : IDataReader
         _isoDep = isoDep;
     }
 
-    public virtual byte[] ReadData(byte[] input)
+    public virtual byte[]? ReadData(byte[] input)
     {
         return _isoDep.Transceive(input);
     }

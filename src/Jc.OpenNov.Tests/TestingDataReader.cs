@@ -9,8 +9,8 @@ public class TestingDataReader : IDataReader
 {
     private readonly Queue<byte[]> _queue;
 
-    public List<byte[]> SentData { get; } = new();
-    public List<byte[]> ReceivedData { get; } = new();
+    public List<byte[]> SentData { get; } = [];
+    public List<byte[]> ReceivedData { get; } = [];
 
     public TestingDataReader(Stream inputStream)
     {
@@ -42,7 +42,7 @@ public class TestingDataReader : IDataReader
 
 public class ByteArrayStore
 {
-    private readonly List<byte[]> _byteList = new();
+    private readonly List<byte[]> _byteList = [];
     public IReadOnlyList<byte[]> Content => _byteList;
 
     public static ByteArrayStore FromInputStream(Stream input)

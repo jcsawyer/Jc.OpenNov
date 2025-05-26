@@ -5,9 +5,10 @@ namespace Jc.OpenNov;
 public static class DataReaderExtensions
 {
     public static TransceiveResult ReadResult(this IDataReader reader, byte[] command)
-    {
+    {   
         reader.OnDataSent(command);
         var data = reader.ReadData(command);
+        
         reader.OnDataReceived(data);
 
         using var ms = new MemoryStream(data);
