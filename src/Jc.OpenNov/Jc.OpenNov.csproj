@@ -4,10 +4,23 @@
         <TargetFrameworks>net9.0;net9.0-android;net9.0-ios</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Title>Jc OpenNov</Title>
+        <Authors>Joseph Sawyer</Authors>
+        <Copyright>Joseph Sawyer</Copyright>
+        <Description>.NET library to read data from NFC Novo Nordisk insulin pens.</Description>
+        <PackageProjectUrl>https://jcsawyer.com/</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/jcsawyer/Jc.OpenNov/tree/main</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <InternalsVisibleTo Include="Jc.OpenNov.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
     
 </Project>
