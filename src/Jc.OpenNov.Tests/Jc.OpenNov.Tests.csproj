@@ -26,10 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="nvp_datatest.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="nvp_jcs_datatest.txt">
+      <None Update="datatest.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
