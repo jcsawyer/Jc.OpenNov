@@ -1,7 +1,4 @@
 using System.Diagnostics;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Jc.OpenNov.Tests;
 
@@ -25,14 +22,14 @@ public class TestingDataReader : IDataReader
         return _queue.Dequeue();
     }
 
-    public void OnDataSent(byte[] data)
+    public void DataSent(byte[] data)
     {
         Console.WriteLine("Data sent: " + BitConverter.ToString(data));
         Debug.WriteLine("Data sent: " + BitConverter.ToString(data));
         SentData.Add(data);
     }
 
-    public void OnDataReceived(byte[] data)
+    public void DataReceived(byte[] data)
     {
         Console.WriteLine("Data received: " + BitConverter.ToString(data));
         Debug.WriteLine("Data received: " + BitConverter.ToString(data));

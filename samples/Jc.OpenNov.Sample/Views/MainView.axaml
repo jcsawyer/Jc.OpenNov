@@ -12,5 +12,12 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid ColumnDefinitions="*" RowDefinitions="*">
+        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Start NFC" Command="{Binding StarNfcCommand}" HorizontalAlignment="Center"></Button>
+            <Button Content="Stop NFC" Command="{Binding StopNfcCommand}" HorizontalAlignment="Center"></Button>
+            <TextBlock Text="{Binding TagId, StringFormat='Tag ID: {0}'}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Text="{Binding Serial, StringFormat='Serial #: {0}'}" HorizontalAlignment="Center"></TextBlock>
+        </StackPanel>
+    </Grid>
 </UserControl>

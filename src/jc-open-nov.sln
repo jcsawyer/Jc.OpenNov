@@ -6,6 +6,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Tests", "Jc.Open
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Nfc.Android", "Jc.OpenNov.Nfc.Android\Jc.OpenNov.Nfc.Android.csproj", "{C721D824-E5E1-4489-8BBB-65B7A92B26BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Avalonia", "Jc.OpenNov.Avalonia\Jc.OpenNov.Avalonia.csproj", "{52294EAF-B58E-4991-8F58-7FC4807CD901}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jc.OpenNov.Avalonia.Android", "Jc.OpenNov.Avalonia.Android\Jc.OpenNov.Avalonia.Android.csproj", "{F9D7E8F1-E19A-426E-AF44-756EAA4DB305}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3DA99C4E-89E3-4049-9C22-0A7EC60D83D8}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +33,14 @@ Global
 		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C721D824-E5E1-4489-8BBB-65B7A92B26BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52294EAF-B58E-4991-8F58-7FC4807CD901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52294EAF-B58E-4991-8F58-7FC4807CD901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52294EAF-B58E-4991-8F58-7FC4807CD901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52294EAF-B58E-4991-8F58-7FC4807CD901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D7E8F1-E19A-426E-AF44-756EAA4DB305}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D7E8F1-E19A-426E-AF44-756EAA4DB305}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D7E8F1-E19A-426E-AF44-756EAA4DB305}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D7E8F1-E19A-426E-AF44-756EAA4DB305}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
