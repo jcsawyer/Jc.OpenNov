@@ -9,7 +9,7 @@ public sealed class PhdManager
     private const int MaxReadSize = 255;
 
     private readonly IDataReader _dataReader;
-    private int sequence = 1;
+    private int _sequence = 1;
 
     public PhdManager(IDataReader dataReader)
     {
@@ -28,7 +28,7 @@ public sealed class PhdManager
 
     private byte[] SendRequest(byte[] data)
     {
-        var phd = new PhdPacket(sequence++, data);
+        var phd = new PhdPacket(_sequence++, data);
         var update = new T4Update(phd.ToByteArray());
 
         Debug.WriteLine("PhdPacket: " + BitConverter.ToString(phd.ToByteArray()));
@@ -37,7 +37,7 @@ public sealed class PhdManager
         using (Request(update.ToByteArray()));
 
         using var readLen = Request(CreateReadPayload(0, 2));
-        if (!readLen.Success || readLen.Content.Length < 2)
+        if (!readLen.Success || readLen.Content is null || readLen.Content.Length < 2)
         {
             throw new InvalidOperationException("Failed to read length of PHD packet.");
         }
@@ -52,6 +52,10 @@ public sealed class PhdManager
         {
             var readLength = reads[index];
             using var readResult = Request(CreateReadPayload(2 + index * MaxReadSize, readLength));
+            if (readResult.Content is null || readResult.Content.Length < readLength)
+            {
+                throw new InvalidOperationException("Failed to read full packet.");
+            }
             Array.Copy(readResult.Content.ToArray(), 0, fullResult, offset, readLength);
             offset += readLength;
         }
@@ -62,7 +66,7 @@ public sealed class PhdManager
         using var buffer = new BinaryReader(new MemoryStream(fullResult));
         var resultPhd = PhdPacket.FromBinaryReader(buffer);
 
-        sequence = resultPhd.Seq + 1;
+        _sequence = resultPhd.Seq + 1;
 
         return resultPhd.Content;
     }
@@ -94,7 +98,7 @@ public sealed class PhdManager
         ];
     }
 
-    internal static List<int> DecomposeNumber(int n, int maxValue)
+    private static List<int> DecomposeNumber(int n, int maxValue)
     {
         var times = n / maxValue;
         var remainder = n % maxValue;

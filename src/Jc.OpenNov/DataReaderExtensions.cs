@@ -5,11 +5,14 @@ namespace Jc.OpenNov;
 public static class DataReaderExtensions
 {
     public static TransceiveResult ReadResult(this IDataReader reader, byte[] command)
-    {   
-        reader.OnDataSent(command);
+    {
+        reader.DataSent(command);
         var data = reader.ReadData(command);
-        
-        reader.OnDataReceived(data);
+
+        if (data is not null)
+        {
+            reader.DataReceived(data);
+        }
 
         using var ms = new MemoryStream(data);
         using var br = new BinaryReader(ms);
@@ -18,8 +21,9 @@ public static class DataReaderExtensions
         var content = br.GetBytes(dataSize);
         var status = br.GetUnsignedShort() & 0xFFFF;
 
-        return new TransceiveResult {
-            Content = new MemoryStream(content), 
+        return new TransceiveResult
+        {
+            Content = new MemoryStream(content),
             Success = status == NvpController.CommandCompleted
         };
     }

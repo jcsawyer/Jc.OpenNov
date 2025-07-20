@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net9.0;net9.0-android;net9.0-ios</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Title>Jc OpenNov Avalonia</Title>
+        <Authors>Joseph Sawyer</Authors>
+        <Copyright>Joseph Sawyer</Copyright>
+        <Description>.NET library to read data from NFC Novo Nordisk insulin pens in Avalonia.</Description>
+        <PackageProjectUrl>https://jcsawyer.com/</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/jcsawyer/Jc.OpenNov/tree/main</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Jc.OpenNov.Avalonia.Android" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Jc.OpenNov\Jc.OpenNov.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>

@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
+using Jc.OpenNov.Avalonia.Android;
 using Jc.OpenNov.Nfc.Android;
 
 namespace Jc.OpenNov.Sample.Android;
@@ -19,7 +20,7 @@ public class MainActivity : AvaloniaMainActivity<App>
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
         return base.CustomizeAppBuilder(builder)
-            .UseOpenNovo(this)
+            .UseOpenNov(this)
             .WithInterFont();
     }
 }

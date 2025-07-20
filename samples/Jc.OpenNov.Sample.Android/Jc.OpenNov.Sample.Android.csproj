@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Jc.OpenNov.Avalonia.Android\Jc.OpenNov.Avalonia.Android.csproj" />
     <ProjectReference Include="..\..\src\Jc.OpenNov.Nfc.Android\Jc.OpenNov.Nfc.Android.csproj" />
     <ProjectReference Include="..\Jc.OpenNov.Sample\Jc.OpenNov.Sample.csproj" />
   </ItemGroup>
