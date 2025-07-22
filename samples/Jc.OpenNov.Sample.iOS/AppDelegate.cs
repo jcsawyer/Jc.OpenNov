@@ -1,9 +1,8 @@
 using Foundation;
-using UIKit;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.iOS;
-using Avalonia.Media;
+using Avalonia.ReactiveUI;
+using Jc.OpenNov.Avalonia.iOS;
 
 namespace Jc.OpenNov.Sample.iOS;
 
@@ -18,6 +17,7 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
         return base.CustomizeAppBuilder(builder)
-            .WithInterFont();
+            .UseOpenNov()
+            .UseReactiveUI();
     }
 }

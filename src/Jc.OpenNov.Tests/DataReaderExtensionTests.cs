@@ -16,12 +16,12 @@ internal sealed class DataReaderExtensionTests
     }
 
     [Test]
-    public void ReadResult_Returns_Success_When_Command_Completed()
+    public async Task ReadResult_Returns_Success_When_Command_Completed()
     {
         var responseData = new byte[] { 0x01, 0x00, 0x90, 0x00 };
-        _mockReader.Setup(r => r.ReadData(_command)).Returns(responseData);
+        _mockReader.Setup(r => r.ReadDataAsync(_command)).ReturnsAsync(responseData);
 
-        var result = _mockReader.Object.ReadResult(_command);
+        var result = await _mockReader.Object.ReadResult(_command);
 
         Assert.Multiple(() =>
         {
@@ -31,12 +31,12 @@ internal sealed class DataReaderExtensionTests
     }
 
     [Test]
-    public void ReadResult_Returns_Failure_When_Command_Not_Completed()
+    public async Task ReadResult_Returns_Failure_When_Command_Not_Completed()
     {
         var responseData = new byte[] { 0x00, 0x01, 0x03, 0x04 };
-        _mockReader.Setup(r => r.ReadData(_command)).Returns(responseData);
+        _mockReader.Setup(r => r.ReadDataAsync(_command)).ReturnsAsync(responseData);
 
-        var result = _mockReader.Object.ReadResult(_command);
+        var result = await _mockReader.Object.ReadResult(_command);
 
         Assert.Multiple(() =>
         {
@@ -49,7 +49,7 @@ internal sealed class DataReaderExtensionTests
     public void ReadResult_Handles_Empty_Response_Data()
     {
         var responseData = Array.Empty<byte>();
-        _mockReader.Setup(r => r.ReadData(_command)).Returns(responseData);
+        _mockReader.Setup(r => r.ReadDataAsync(_command)).ReturnsAsync(responseData);
 
         Assert.That(() => _mockReader.Object.ReadResult(_command), Throws.InstanceOf<ArgumentOutOfRangeException>());
     }
@@ -57,7 +57,7 @@ internal sealed class DataReaderExtensionTests
     [Test]
     public void ReadResult_Handles_Null_Response_Data()
     {
-        _mockReader.Setup(r => r.ReadData(_command)).Returns((byte[])null);
+        _mockReader.Setup(r => r.ReadDataAsync(_command)).ReturnsAsync((byte[])null);
 
         Assert.That(() => _mockReader.Object.ReadResult(_command), Throws.ArgumentNullException);
     }

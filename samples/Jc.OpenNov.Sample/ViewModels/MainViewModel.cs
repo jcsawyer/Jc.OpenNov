@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Jc.OpenNov.Avalonia;
 using ReactiveUI;
@@ -50,6 +51,7 @@ public partial class MainViewModel : ViewModelBase
     private void OnError(object? sender, Exception e)
     {
         // Handle error event
+        Debug.WriteLine(e.Message);
     }
     
     private void StartNfc()

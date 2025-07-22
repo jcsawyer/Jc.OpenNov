@@ -16,17 +16,17 @@ public sealed class PhdManager
         _dataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader));
     }
 
-    private TransceiveResult Request(byte[] data)
+    private Task<TransceiveResult> Request(byte[] data)
     {
         return _dataReader.ReadResult(data);
     }
 
-    public byte[] SendEmptyRequest()
+    public Task<byte[]> SendEmptyRequest()
     {
         return SendRequest([]);
     }
 
-    private byte[] SendRequest(byte[] data)
+    private async Task<byte[]> SendRequest(byte[] data)
     {
         var phd = new PhdPacket(_sequence++, data);
         var update = new T4Update(phd.ToByteArray());
@@ -34,9 +34,9 @@ public sealed class PhdManager
         Debug.WriteLine("PhdPacket: " + BitConverter.ToString(phd.ToByteArray()));
         Debug.WriteLine("T4Update: " + BitConverter.ToString(update.ToByteArray()));
 
-        using (Request(update.ToByteArray()));
+        await using (await Request(update.ToByteArray()).ConfigureAwait(false));
 
-        using var readLen = Request(CreateReadPayload(0, 2));
+        await using var readLen = await Request(CreateReadPayload(0, 2)).ConfigureAwait(false);
         if (!readLen.Success || readLen.Content is null || readLen.Content.Length < 2)
         {
             throw new InvalidOperationException("Failed to read length of PHD packet.");
@@ -51,7 +51,7 @@ public sealed class PhdManager
         for (var index = 0; index < reads.Count; index++)
         {
             var readLength = reads[index];
-            using var readResult = Request(CreateReadPayload(2 + index * MaxReadSize, readLength));
+            await using var readResult = await Request(CreateReadPayload(2 + index * MaxReadSize, readLength)).ConfigureAwait(false);
             if (readResult.Content is null || readResult.Content.Length < readLength)
             {
                 throw new InvalidOperationException("Failed to read full packet.");
@@ -61,7 +61,7 @@ public sealed class PhdManager
         }
         
         var ack = new T4Update([0xd0, 0x00, 0x00]);
-        using (_dataReader.ReadResult(ack.ToByteArray()));
+        await using (await _dataReader.ReadResult(ack.ToByteArray()).ConfigureAwait(false));
 
         using var buffer = new BinaryReader(new MemoryStream(fullResult));
         var resultPhd = PhdPacket.FromBinaryReader(buffer);
@@ -71,14 +71,14 @@ public sealed class PhdManager
         return resultPhd.Content;
     }
 
-    public byte[] SendApduRequest(Apdu apdu)
+    public Task<byte[]> SendApduRequest(Apdu apdu)
     {
         return SendRequest(apdu.ToByteArray());
     }
 
-    public T DecodeDataApduRequest<T>(Apdu inputApdu) where T : Encodable
+    public async Task<T> DecodeDataApduRequest<T>(Apdu inputApdu) where T : Encodable
     {
-        var byteArray = SendApduRequest(inputApdu);
+        var byteArray = await SendApduRequest(inputApdu).ConfigureAwait(false);
         using var stream = new MemoryStream(byteArray);
         using var reader = new BinaryReader(stream);
         var outputApdu = Apdu.FromBinaryReader(reader);

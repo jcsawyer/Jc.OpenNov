@@ -15,11 +15,11 @@ public class TestingDataReader : IDataReader
         _queue = new Queue<byte[]>(dataStore.Content);
     }
 
-    public byte[] ReadData(byte[] input)
+    public Task<byte[]> ReadDataAsync(byte[] input)
     {
         if (_queue.Count == 0)
             throw new EndOfStreamException("No more test data available.");
-        return _queue.Dequeue();
+        return Task.FromResult(_queue.Dequeue());
     }
 
     public void DataSent(byte[] data)

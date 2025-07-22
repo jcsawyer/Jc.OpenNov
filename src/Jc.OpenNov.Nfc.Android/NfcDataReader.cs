@@ -14,19 +14,21 @@ public class NfcDataReader : IDataReader
         _isoDep = isoDep;
     }
 
-    public virtual byte[] ReadData(byte[] input)
+    public virtual Task<byte[]?> ReadDataAsync(byte[] input)
     {
         // According to the docs, Transceive(input) should not return null.
-        return _isoDep.Transceive(input)!;
+        return Task.FromResult(_isoDep.Transceive(input));
     }
 
     public virtual void DataSent(byte[] data)
     {
+        System.Diagnostics.Debug.WriteLine($"Data sent: {BitConverter.ToString(data)}");
         OnDataSent?.Invoke(this, data);
     }
 
     public virtual void DataReceived(byte[] data)
     {
+        System.Diagnostics.Debug.WriteLine($"Data received: {BitConverter.ToString(data)}");
         OnDataReceived?.Invoke(this, data);
     }
 }

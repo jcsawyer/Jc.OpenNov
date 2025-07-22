@@ -1,13 +1,14 @@
+using System.Diagnostics;
 using Jc.OpenNov.Utilities;
 
 namespace Jc.OpenNov;
 
 public static class DataReaderExtensions
 {
-    public static TransceiveResult ReadResult(this IDataReader reader, byte[] command)
+    public static async Task<TransceiveResult> ReadResult(this IDataReader reader, byte[] command)
     {
         reader.DataSent(command);
-        var data = reader.ReadData(command);
+        var data = await reader.ReadDataAsync(command).ConfigureAwait(false);
 
         if (data is not null)
         {

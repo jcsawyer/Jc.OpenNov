@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Jc.OpenNov.Sample</string>
 	<key>CFBundleIdentifier</key>
-	<string>companyName.Jc.OpenNov.Sample</string>
+	<string>Jc.OpenNov.Sample.iOS</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -13,7 +13,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>13.0</string>
+	<string>16.0</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -26,7 +26,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
-	<array>
+	<array>4
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -38,6 +38,14 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>NFCReaderUsageDescription</key>
+	<string>Used to retrieve data from Novo pens.</string>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>D2760000850101</string>
+		<string>E103</string>
+		<string>E104</string>
 	</array>
 </dict>
 </plist>

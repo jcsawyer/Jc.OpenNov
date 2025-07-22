@@ -10,7 +10,7 @@ public static class AppBuilderExtensions
     {
         return appBuilder.AfterSetup(_ =>
         {
-            OpenNov.Current.Nfc = new Nfc(new NfcController(activity));
+            OpenNov.Current.Nfc = new Nfc(new NfcController(activity, runner));
         });
     }
 }
