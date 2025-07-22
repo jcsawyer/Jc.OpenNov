@@ -90,7 +90,7 @@ public sealed class NvpController
                     storageDataApdu.Payload is SegmentInfoList segmentInfoList)
                 {
                     var segment = segmentInfoList.Items.First();
-                    ReadSegment(segment, storageDataApdu.InvokeId, doseList, list => stopCondition(serial, list));
+                    await ReadSegment(segment, storageDataApdu.InvokeId, doseList, list => stopCondition(serial, list)).ConfigureAwait(false);
 
                     return new PenResult.Success(new PenResultData
                     {
