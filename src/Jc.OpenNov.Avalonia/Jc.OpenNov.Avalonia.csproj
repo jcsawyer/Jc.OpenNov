@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net9.0;net9.0-android;net9.0-ios</TargetFrameworks>
+        <TargetFrameworks>net8.0;net8.0-android;net8.0-ios</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Title>Jc OpenNov Avalonia</Title>
@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Jc.OpenNov.Avalonia.Android" />
+        <InternalsVisibleTo Include="Jc.OpenNov.Avalonia.iOS" />
     </ItemGroup>
     
     <ItemGroup>
@@ -23,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" />
+        <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     </ItemGroup>
 
     <ItemGroup>

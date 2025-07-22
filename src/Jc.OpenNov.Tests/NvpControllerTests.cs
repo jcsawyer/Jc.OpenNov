@@ -17,9 +17,9 @@ internal sealed class NvpControllerTests
     }
 
     [Test]
-    public void DataRead()
+    public async Task DataRead()
     {
-        var result = _controller.DataRead();
+        var result = await _controller.DataRead();
 
         Assert.That(result, Is.TypeOf<PenResult.Success>());
 
@@ -47,9 +47,9 @@ internal sealed class NvpControllerTests
     }
 
     [Test]
-    public void DataReadStopCondition()
+    public async Task DataReadStopCondition()
     {
-        var result = _controller.DataRead((_, list) =>
+        var result = await _controller.DataRead((_, list) =>
             list.FirstOrDefault(d => d.Time > 1726330347000L) != null
         );
 

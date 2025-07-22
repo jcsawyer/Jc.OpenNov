@@ -9,12 +9,13 @@ C# implementation derived from [lcacheux](https://github.com/lcacheux)'s Kotlin 
 - [Introduction](#introduction)
 - [Usage](#usage)
 - [Barebones (MAUI/etc.)](#barebones-mauietc)
-- [Android](#android)
-- [iOS (coming soon)](#ios)
+- [Avalonia Android](#avalonia-android)
+- [Avalonia iOS](#avalonia-ios)
+- [Avalonia](#avalonia)
 
 ## Introduction
 
-Jc.OpenNov is a library designed to facilitate the reading of data from NFC Novo Nordisk insulin pens.
+Jc.OpenNov is a library designed to facilitate the reading of data from NFC Novo Nordisk insulin pens from iOS and Android in .NET.
 
 ### Components
 
@@ -22,12 +23,13 @@ Jc.OpenNov is a library designed to facilitate the reading of data from NFC Novo
 - _Jc.OpenNov.Nfc.Android:_ Android implementation of NFC communication using Jc.OpenNov.
 - _Jc.OpenNov.Avalonia:_ Avalonia implementation of NFC communication using Jc.OpenNov.
 - _Jc.OpenNov.Avalonia.Android:_ Android implementation of NFC communication using Jc.OpenNov.Avalonia.
+- _Jc.OpenNov.Avalonia.iOS:_ iOS implementation of NFC communication using Jc.OpenNov.Avalonia.
 
 ### Sample Screenshots
 
 | Android | iOS |
 | ------- | --- |
-| <img alt="Android" src="img/android.JPG" width="250" /> | | 
+| <img alt="Android" src="img/android.JPG" width="250" /> | <img alt="Android" src="img/ios.jpeg" width="250" /> | 
 
 ## Usage
 
@@ -45,7 +47,7 @@ Followed by adding the Android/iOS `Jc.OpenNov.Nfc.xxx` package to your project:
 dotnet add package Jc.OpenNov.Nfc.Android
 ```
 
-### Android
+### Avalonia Android
 
 Install the following NuGet packages to their respective projects:
 
@@ -71,6 +73,51 @@ protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
         .UseOpenNov(this);
 }
 ```
+
+### Avalonia iOS
+
+Install the following NuGet packages to their respective projects:
+
+```bash
+dotnet add package Jc.OpenNov.Avalonia
+dotnet add package Jc.OpenNov.Avalonia.iOS
+```
+
+Add the following to your Entitlements.plist:
+
+```xml
+<key>com.apple.developer.nfc.readersession.formats</key>
+<array>
+    <string>TAG</string>
+</array>
+```
+
+and the following to your Info.plist:
+
+```xml
+<key>NFCReaderUsageDescription</key>
+<string>Used to retrieve data from Novopens.</string>
+<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+<array>
+    <string>D2760000850101</string>
+    <string>E103</string>
+    <string>E104</string>
+</array>
+```
+
+In your `AppDelegate`, add to your `AppBuilder` like so:
+
+```csharp
+protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+{
+    return base.CustomizeAppBuilder(builder)
+        // ...
+        .UseOpenNov();
+}
+```
+
+
+### Avalonia
 
 To start listening for NFC tags, call:
 
@@ -129,7 +176,3 @@ private void OnError(object? sender, Exception e)
     Error = e.Message;
 }
 ```
-
-### iOS
-
-// Coming soon

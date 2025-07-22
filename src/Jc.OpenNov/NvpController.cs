@@ -26,25 +26,25 @@ public sealed class NvpController
         _phdManager = new PhdManager(_dataReader);
     }
     
-    public PenResult DataRead(Func<string, List<InsulinDose>, bool>? stopCondition = null)
+    public async Task<PenResult> DataRead(Func<string, List<InsulinDose>, bool>? stopCondition = null)
         {
-            using (_dataReader.ReadResult(PayloadFunctions.ApplicationSelect()));
-            using (_dataReader.ReadResult(PayloadFunctions.CapabilityContainerSelect()));
-            using (_dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 15)));
-            using (_dataReader.ReadResult(PayloadFunctions.NdefSelect()));
+            await using (await _dataReader.ReadResult(PayloadFunctions.ApplicationSelect()));
+            await using (await _dataReader.ReadResult(PayloadFunctions.CapabilityContainerSelect()));
+            await using (await _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 15)));
+            await using (await _dataReader.ReadResult(PayloadFunctions.NdefSelect()));
 
-            return RetrieveConfiguration(stopCondition ?? ((_, _) => false));
+            return await RetrieveConfiguration(stopCondition ?? ((_, _) => false)).ConfigureAwait(false);
         }
 
-        private PenResult RetrieveConfiguration(Func<string, List<InsulinDose>, bool> stopCondition)
+        private async Task<PenResult> RetrieveConfiguration(Func<string, List<InsulinDose>, bool> stopCondition)
         {
-            using var lengthResult = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 2));
+            await using var lengthResult = await _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(0, 2)).ConfigureAwait(false);
             int length = new BinaryReader(lengthResult.Content).GetShort();
 
-            using var fullRead = _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(2, length));
+            await using var fullRead = await _dataReader.ReadResult(PayloadFunctions.CreateReadPayload(2, length)).ConfigureAwait(false);
 
             var ack = new T4Update([0xD0, 0x00, 0x00]);
-            using (_dataReader.ReadResult(ack.ToByteArray()));
+            await using (await _dataReader.ReadResult(ack.ToByteArray()).ConfigureAwait(false));
 
             using var fullReadReader = new BinaryReader(fullRead.Content);
             var phdPacket = PhdPacket.FromBinaryReader(fullReadReader);
@@ -59,7 +59,7 @@ public sealed class NvpController
                 new AResponse(result: 3, protocol: ApoepElement.Apoep, apoep: aRequest.Apoep)
             );
 
-            var result = _phdManager.SendApduRequest(sendApdu);
+            var result = await _phdManager.SendApduRequest(sendApdu).ConfigureAwait(false);
             using var adpuMs = new MemoryStream(result);
             using var adpuReader = new BinaryReader(adpuMs);
             var resultApdu = Apdu.FromBinaryReader(adpuReader);
@@ -69,11 +69,11 @@ public sealed class NvpController
 
             if (configuration != null)
             {
-                _phdManager.SendApduRequest(PayloadFunctions.RetrieveInformation(dataApdu.InvokeId, configuration));
+                await _phdManager.SendApduRequest(PayloadFunctions.RetrieveInformation(dataApdu.InvokeId, configuration));
 
-                var info = _phdManager.DecodeDataApduRequest<FullSpecification>(
+                var info = await _phdManager.DecodeDataApduRequest<FullSpecification>(
                     PayloadFunctions.AskInformation(dataApdu.InvokeId, configuration)
-                );
+                ).ConfigureAwait(false);
 
                 var model = string.Join(" ", info.Model);
                 var serial = info.Specification.Serial;
@@ -81,7 +81,7 @@ public sealed class NvpController
 
                 var doseList = new List<InsulinDose>();
 
-                var storageArray = _phdManager.SendApduRequest(PayloadFunctions.ConfirmedAction(dataApdu.InvokeId));
+                var storageArray = await _phdManager.SendApduRequest(PayloadFunctions.ConfirmedAction(dataApdu.InvokeId)).ConfigureAwait(false);
                 using var saMs = new MemoryStream(storageArray);
                 using var saReader = new BinaryReader(saMs);
                 var storage = Apdu.FromBinaryReader(saReader);
@@ -105,21 +105,21 @@ public sealed class NvpController
             return new PenResult.Failure("Unknown error");
         }
 
-        private void ReadSegment(SegmentInfo segment, ushort invokeId, List<InsulinDose> doseList, Func<List<InsulinDose>, bool> stopCondition)
+        private async Task ReadSegment(SegmentInfo segment, ushort invokeId, List<InsulinDose> doseList, Func<List<InsulinDose>, bool> stopCondition)
         {
-            var xferArray = _phdManager.SendApduRequest(PayloadFunctions.XferAction(invokeId, segment.InstNum));
+            var xferArray = await _phdManager.SendApduRequest(PayloadFunctions.XferAction(invokeId, segment.InstNum)).ConfigureAwait(false);
             using var xferMs = new MemoryStream(xferArray);
             using var xferReader = new BinaryReader(xferMs);
             Apdu.FromBinaryReader(xferReader); // xfer
 
-            var result = _phdManager.SendEmptyRequest();
+            var result = await _phdManager.SendEmptyRequest().ConfigureAwait(false);
 
             var finished = false;
 
             do
             {
                 if (result.Length == 0)
-                    result = _phdManager.SendEmptyRequest();
+                    result = await _phdManager.SendEmptyRequest().ConfigureAwait(false);
 
                 using var ms = new MemoryStream(result);
                 using var reader = new BinaryReader(ms);
@@ -139,10 +139,10 @@ public sealed class NvpController
                     var currentInstance = (ushort)eventReport.Instance;
                     var currentIndex = eventReport.Index;
 
-                    result = _phdManager.SendApduRequest(PayloadFunctions.ConfirmedXfer(
+                    result = await _phdManager.SendApduRequest(PayloadFunctions.ConfirmedXfer(
                         logApdu.GetDataApdu()?.InvokeId ?? 0,
                         PayloadFunctions.EventRequestData(currentInstance, currentIndex, eventReport.InsulinDoses.Count, true)
-                    ));
+                    )).ConfigureAwait(false);
                 }
                 else
                 {

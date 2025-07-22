@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
+using Avalonia.ReactiveUI;
 using Jc.OpenNov.Avalonia.Android;
 using Jc.OpenNov.Nfc.Android;
 
@@ -21,6 +22,6 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         return base.CustomizeAppBuilder(builder)
             .UseOpenNov(this)
-            .WithInterFont();
+            .UseReactiveUI();
     }
 }

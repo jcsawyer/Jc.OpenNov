@@ -40,12 +40,12 @@ public class NfcController
                         OnError?.Invoke(this, new InvalidOperationException("Tag is null"));
                         return;
                     }
-                    
-                    _runner(() =>
+
+                    _runner(async void () =>
                     {
-                        OnTagDetected?.Invoke(this, tag);
                         try
                         {
+                            OnTagDetected?.Invoke(this, tag);
                             var isoDep = IsoDep.Get(tag);
                             if (isoDep != null)
                             {
@@ -61,7 +61,7 @@ public class NfcController
 
                                 var controller = new NvpController(dataReader);
 
-                                var result = controller.DataRead(stopCondition);
+                                var result = await controller.DataRead(stopCondition).ConfigureAwait(false);
                                 OnDataRead?.Invoke(this, result);
 
                                 isoDep.Close();

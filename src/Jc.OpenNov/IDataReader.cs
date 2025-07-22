@@ -1,10 +1,8 @@
-using System.Buffers.Binary;
-
 namespace Jc.OpenNov;
 
 public interface IDataReader
 {
-    byte[]? ReadData(byte[] input);
+    Task<byte[]?> ReadDataAsync(byte[] input);
     void DataSent(byte[] data);
     void DataReceived(byte[] data);
 }

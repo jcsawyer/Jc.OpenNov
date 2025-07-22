@@ -1,6 +1,6 @@
 namespace Jc.OpenNov.Data;
 
-public class EncodableField<T>
+public class EncodableField<T> : IEncodableField
 {
     public Func<T> Getter { get; }
     public Action<BinaryWriter, T> Serializer { get; }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0-android</TargetFramework>
+        <TargetFramework>net8.0-android</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Title>Jc OpenNov Avalonia</Title>
@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Android" />
+        <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,7 +2,7 @@ namespace Jc.OpenNov.Data;
 
 public class Encodable : IEncodable
 {
-    protected readonly List<object> Fields = [];
+    protected readonly List<IEncodableField> Fields = [];
 
     protected void Field<T>(Func<T> getter, Action<BinaryWriter, T> serializer, Func<T, int> sizeFunc)
     {
@@ -10,12 +10,11 @@ public class Encodable : IEncodable
     }
 
     public virtual int GetEncodedSize() => Fields
-        .Cast<dynamic>()
         .Sum(field => (int)field.GetSize());
 
     public virtual void WriteTo(BinaryWriter writer)
     {
-        foreach (dynamic field in Fields)
+        foreach (var field in Fields)
         {
             field.Write(writer);
         }
